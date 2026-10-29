@@ -6,19 +6,28 @@ import { registerOAuthRoutes } from "./oauth";
 import { publicPlatformScript } from "./publicConfig";
 import { appRouter } from "../routers";
 import { createContext } from "./context";
+import { partnerNoStoreMiddleware, registerPartnerRoutes } from "../partner";
 import { serveStatic, setupVite } from "./vite";
 
 async function startServer() {
   const app = express();
   const server = createServer(app);
-  // Configure body parser with larger size limit for file uploads
-  app.use(express.json({ limit: "50mb" }));
-  app.use(express.urlencoded({ limit: "50mb", extended: true }));
+  // Apply privacy headers even if the JSON parser rejects a malformed/oversize partner payload.
+  app.use("/api/partner", partnerNoStoreMiddleware);
+  // 5 MiB source files expand to roughly 6.67 MiB base64; no endpoint needs a larger JSON body.
+  app.use(express.json({ limit: "8mb" }));
+  app.use(express.urlencoded({ limit: "1mb", extended: true }));
   app.get("/api/health", (_req, res) => res.json({ status: "ok" }));
   app.get("/api/platform/config.js", (_req, res) => {
     res.set("Cache-Control", "no-store").type("application/javascript").send(publicPlatformScript());
   });
   registerOAuthRoutes(app);
+  registerPartnerRoutes(app);
+  // The dashboard is an internal view even though Vite/static serving supplies its SPA shell.
+  app.use("/dashboard", (_req, res, next) => {
+    res.set("X-Robots-Tag", "noindex, nofollow, noarchive");
+    next();
+  });
   // tRPC API
   app.use(
     "/api/trpc",

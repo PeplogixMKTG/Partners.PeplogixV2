@@ -8,6 +8,20 @@
       "when": 1788785580464,
       "tag": "0000_initial_users",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1793294390779,
+      "tag": "0001_partner_inquiries",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1793295329439,
+      "tag": "0002_partner_admin_invites",
+      "breakpoints": true
     }
   ]
 }
