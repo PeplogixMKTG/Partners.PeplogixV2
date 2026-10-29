@@ -4,3 +4,9 @@
 - Supplied logo: /home/ubuntu/upload/peplogix-navy-transparent.webp, used unchanged.
 - Original product assets: https://peplogix.github.io/assets/prod-caps.webp and prod-serum.webp.
 - Peplogix BPC Wolverine product image sourced through image search, copied to client/public/brand/peplogix-product.png.
+
+## Product packaging references supplied October 29, 2026
+
+User supplied Peplogix_Dihexa_Supplement_Bottle_3.webp and Clinical_Peptide_Vial_Trio_1.webp. New hero and blank live-label photographic bases use those packaging shapes, caps, glass/white-plastic materials and white-label language. These are illustrative partnership-branding renderings, not new real product specifications. No dosage/purity promises added.
+
+Managed optimized assets: `/manus-storage/peplogix-partner-hero-v2_267c012e.webp`, `/manus-storage/clinical-vial-preview-v2_b0774c91.webp`, `/manus-storage/capsule-bottle-preview-v2_41946d5a.webp`. All returned HTTP200 image/webp through the stable Preview gateway. Large original PNGs are outside the repository; no standalone image deliverables requested.

@@ -3,7 +3,6 @@ import {
   ArrowUpRight,
   Boxes,
   Check,
-  ChevronDown,
   FlaskConical,
   Globe2,
   Layers3,
@@ -14,8 +13,8 @@ import {
   ShoppingBag,
   Truck,
 } from "lucide-react";
-import { useState } from "react";
 import PartnerInquiry from "@/components/partner/PartnerInquiry";
+import "./hero-products.css";
 
 const opportunities = [
   {
@@ -56,61 +55,7 @@ const opportunities = [
   },
 ];
 
-function HeroVial({ secondary = false }: { secondary?: boolean }) {
-  return (
-    <div
-      className={`hero-vial ${secondary ? "hero-vial--back" : ""}`}
-      aria-hidden="true"
-    >
-      <div className="hv-cap">
-        <i />
-      </div>
-      <div className="hv-neck" />
-      <div className="hv-glass">
-        <div className="hv-reflection" />
-        <div className="hv-label">
-          <div className="hv-logo">
-            <img src="/brand/peplogix-logo.webp" alt="" />
-          </div>
-          <div className="hv-rule" />
-          <span className="hv-research">RESEARCH PEPTIDES</span>
-          <div className="hv-product">
-            Built for
-            <br />
-            your brand.
-          </div>
-          <div className="hv-color">
-            <span>PRECISION. POSSIBILITY.</span>
-            <FlaskConical size={15} />
-          </div>
-          <span className="hv-micro">FOR RESEARCH USE ONLY</span>
-          <div className="hv-tiny">
-            <span>PEPLOGIX</span>
-            <span>PARTNER COLLECTION</span>
-          </div>
-        </div>
-        <div className="hv-bottom" />
-      </div>
-    </div>
-  );
-}
-
 export default function Home() {
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
-  const faqs = [
-    [
-      "Can I explore more than one partnership option?",
-      "Absolutely. Select all the options that interest you in the inquiry. Our team will review how product supply, branding, storefronts, and fulfillment can work together for your business.",
-    ],
-    [
-      "Do I need an existing website or a finished brand?",
-      "No. Whether you already have an established business or are shaping a new brand, you can share where you are today. A website and finalized brand colors are not required to begin.",
-    ],
-    [
-      "What happens after I submit my inquiry?",
-      "The Peplogix team will review your business details and partnership interests, then reach out to discuss your needs and possible next steps. Submitting an inquiry does not guarantee partnership approval.",
-    ],
-  ];
   return (
     <>
       <a className="skip-link" href="#inquiry">
@@ -173,40 +118,20 @@ export default function Home() {
                 </span>
               </div>
             </div>
-            <div
-              className="hero-visual"
-              role="img"
-              aria-label="Peplogix research vial branding visualization with navy and teal labels"
-            >
-              <div className="visual-kicker">
+            <div className="hero-product-visual">
+              <div className="hero-product-kicker">
                 <span className="teal-dot" /> YOUR VISION. OUR FOUNDATION.
               </div>
-              <div className="orbital orbital-one" />
-              <div className="orbital orbital-two" />
-              <div className="orbital-dot orbital-dot-one" />
-              <div className="orbital-dot orbital-dot-two" />
-              <div className="visual-cross cross-one">+</div>
-              <div className="visual-cross cross-two">+</div>
-              <div className="hero-box">
-                <div className="box-front">
-                  <img src="/brand/peplogix-logo.webp" alt="" />
-                  <div className="box-type">
-                    THE NEXT
-                    <br />
-                    CHAPTER
-                    <br />
-                    <span>IS YOURS.</span>
-                  </div>
-                  <div className="box-bottom">
-                    PEPLOGIX PARTNERS <ArrowUpRight size={14} />
-                  </div>
-                </div>
-                <div className="box-side" />
-              </div>
-              <div className="vial-platform" />
-              <HeroVial secondary />
-              <HeroVial />
-              <div className="brand-callout">
+              <img
+                className="hero-product-artwork"
+                src="/manus-storage/peplogix-partner-hero-v2_267c012e.webp"
+                alt="Peplogix-style white capsule bottle and clear clinical vial with your-brand concept labeling"
+                width={1400}
+                height={1400}
+                fetchPriority="high"
+                decoding="async"
+              />
+              <div className="hero-product-callout">
                 <div className="callout-icon">
                   <Palette size={18} />
                 </div>
@@ -214,16 +139,11 @@ export default function Home() {
                   <span>YOUR IDENTITY. REIMAGINED.</span>
                   <strong>Your brand belongs here.</strong>
                 </div>
-                <div className="callout-colors">
-                  <i />
-                  <i />
-                  <i />
-                </div>
+                <ArrowUpRight size={16} aria-hidden="true" />
               </div>
-              <div className="visual-caption">
-                <span className="caption-line" /> A PARTNERSHIP WITH YOUR NAME
-                ON IT.
-              </div>
+              <p className="hero-product-caption">
+                CAPSULES & VIALS. ONE DISTINCTIVE BRAND.
+              </p>
             </div>
           </div>
         </section>
@@ -363,32 +283,6 @@ export default function Home() {
               <ShieldCheck size={15} /> Your information is shared securely with
               the Peplogix team.
             </div>
-          </div>
-        </section>
-        <section className="faq-section page-wrap">
-          <div>
-            <div className="eyebrow">A LITTLE MORE CLARITY</div>
-            <h2>Before you begin.</h2>
-          </div>
-          <div className="faq-list">
-            {faqs.map(([q, a], i) => (
-              <div
-                className={`faq-item ${openFaq === i ? "is-open" : ""}`}
-                key={q}
-              >
-                <button
-                  aria-expanded={openFaq === i}
-                  aria-controls={`faq-${i}`}
-                  onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                >
-                  {q}
-                  <ChevronDown size={18} />
-                </button>
-                <div id={`faq-${i}`} hidden={openFaq !== i}>
-                  <p>{a}</p>
-                </div>
-              </div>
-            ))}
           </div>
         </section>
       </main>

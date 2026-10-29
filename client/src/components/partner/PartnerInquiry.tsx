@@ -2044,14 +2044,6 @@ export default function PartnerInquiry() {
 
   return (
     <div className="partner-inquiry">
-      <div className="partner-inquiry__intro">
-        <span className="partner-eyebrow">Partner inquiry</span>
-        <h2>Start a conversation built around your business.</h2>
-        <p>
-          Share what you&apos;re building and the Peplogix team will help
-          identify the right path forward.
-        </p>
-      </div>
       <div className="partner-workflow">
         <nav className="partner-steps" aria-label="Inquiry progress">
           {steps.map(step => {

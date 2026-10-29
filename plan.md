@@ -23,3 +23,7 @@ Publish the saved version through the managed container deployment. The intended
 ## Owner access provisioning
 
 Because no platform owner OpenID was supplied, administrator access is provisioned with a pre-created one-time invitation token delivered privately to the project owner. Only its SHA-256 hash is stored in MySQL; redemption requires a real authenticated Manus account, is expiration-bound and atomically single-use. It never grants rights to the first visitor. The authenticated account consuming the privately delivered code becomes an administrator. Removed temporary upload capabilities can delete only their own unclaimed bytes; abandoned bytes are lazily pruned after 24 hours on new upload.
+
+## Requested visual refinements — October 29
+
+Use supplied capsule-bottle and clinical-vial photos as physical-packaging references for a new generated hero composition and blank photographic bases for functional live-label views. Keep the approved overall layout and palette while exact brand values are pending. Replace tall decorative vial artwork, remove FAQ completely, and normalize section rhythm/remove redundant form intro. No backend or auth changes required.

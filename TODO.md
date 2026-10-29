@@ -600,3 +600,17 @@ A separate read-only validation agent traces form, validation, conditional logic
 ## Evidence and remaining handoff
 
 Desktop/mobile full-flow submissions and private asset behavior passed; exact test data removed. The separate review identified hidden-file payload, aggregate size, optional-selection consistency, MIME allowlist, and unclaimed upload cleanup. These are resolved in the client and backend; focused mobile regression passed. Team access uses real Manus OAuth plus a privately delivered one-time admin activation code. Custom subdomain DNS connection remains pending; no email or CRM delivery is configured. Publication of the recorded version remains to be confirmed.
+
+## [x] Product-reference refinement — October 29
+
+Replace the previous tall decorative hero vials and carton with capsule bottle and short clinical vial renderings matching the supplied Peplogix reference photos. Match white ribbed screw-cap bottles and wide gray flip-off/silver-crimp glass vials with white labels. Update the live your-logo-here preview to this packaging language, preserving live logo/colors and reset, and offer capsule/vial views.
+
+## [x] Section rhythm and FAQ removal
+
+Fix inconsistent section spacing on desktop/mobile, including redundant form introductions. Remove the entire A LITTLE MORE CLARITY / Before you begin FAQ section and unused code/styles. Preserve the secure inquiry backend.
+
+## [ ] Confirmed brand colors
+
+Apply exact brand color codes when supplied. Current user message has two product photographs but no color codes or swatch attachment, so retain the current palette pending values.
+
+Verification: desktop1440 and mobile390 through stable Preview loaded new images, no FAQ/duplicate inquiry intro, measured intro-to-form gaps32px/28px, zero form top padding, no horizontal overflow or JavaScript errors. Both packaging views preserve live colors/logo across switching; reset removes test upload and restores defaults. TypeScript, 17tests and production build passed. Exact brand values remain pending. Earlier publish request was cancelled; this update is for Preview/checkpoint, not claimed live publication.

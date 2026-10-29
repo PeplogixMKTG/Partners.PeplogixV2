@@ -1,0 +1,206 @@
+/* Keep the landing-page intro and guided form in one visual rhythm. */
+.inquiry-section .partner-inquiry {
+  max-width: none;
+  padding: 0;
+}
+.inquiry-section .partner-inquiry--success {
+  padding: clamp(1.5rem, 4vw, 3rem);
+}
+
+.product-preview {
+  margin-top: 16px;
+}
+.packaging-switch {
+  display: flex;
+  align-items: stretch;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid #dfe7e9;
+  border-radius: 7px;
+  background: #f0f4f5;
+}
+.product-preview .packaging-switch button {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 7px 5px;
+  border-radius: 4px;
+  color: #687582;
+  font-size: 10px;
+  font-weight: 550;
+  line-height: 1.3;
+  background: transparent;
+  transition:
+    background 180ms,
+    color 180ms,
+    box-shadow 180ms;
+}
+.product-preview .packaging-switch button[aria-pressed="true"] {
+  color: var(--partner-navy);
+  background: #fff;
+  box-shadow: 0 1px 5px #1018490d;
+}
+.product-preview .packaging-switch button svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  color: var(--partner-teal);
+}
+.vial-mockup.product-mockup {
+  display: block;
+  min-height: 0;
+  margin: 10px 0 0;
+  background: #f2f8fc;
+  border: 1px solid #e7edf1;
+  border-radius: 6px;
+  overflow: hidden;
+}
+.vial-mockup.product-mockup::before {
+  display: none;
+}
+.product-stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  container-type: inline-size;
+}
+.product-photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.product-label {
+  position: absolute;
+  top: 40.4%;
+  left: 28.3%;
+  width: 43.2%;
+  height: 34.6%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  padding: 10% 5% 8%;
+  padding: 4cqw 2cqw 2cqw;
+  color: var(--vial-primary);
+  background: linear-gradient(
+    90deg,
+    #f4f6f7b0,
+    #ffffffd9 22%,
+    #ffffffc2 65%,
+    #e6eaeea8
+  );
+  box-shadow:
+    inset 1px 0 2px #fff8,
+    inset -2px 0 3px #929fac15;
+  overflow: hidden;
+}
+.product-mockup[data-package="capsules"] .product-label {
+  top: 39.8%;
+  left: 25.4%;
+  width: 47.6%;
+  height: 39%;
+  padding-top: 5cqw;
+  padding-inline: 3cqw;
+}
+.product-label__logo-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  min-height: 0;
+  padding: 0 0 2cqw;
+}
+.product-label .vial-mockup__logo {
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  max-height: 15cqw;
+  object-fit: contain;
+  filter: none;
+  mix-blend-mode: multiply;
+}
+.product-label .vial-mockup__placeholder {
+  font-size: 4.1cqw;
+  line-height: 1.2;
+  font-weight: 550;
+  letter-spacing: -0.025em;
+  color: var(--vial-primary);
+  text-shadow: none;
+  white-space: nowrap;
+}
+.product-label__collection {
+  display: grid;
+  place-items: center;
+  min-height: 7cqw;
+  padding: 1.1cqw 0.6cqw;
+  border: 1px solid var(--vial-secondary);
+  color: var(--vial-secondary);
+  font-size: 2.7cqw;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  text-align: center;
+  line-height: 1.2;
+}
+.product-label__detail {
+  padding-block: 1.8cqw;
+  color: var(--vial-primary);
+  font-size: 1.1cqw;
+  letter-spacing: 0.025em;
+  text-align: center;
+}
+.product-label__footer {
+  margin-top: auto;
+  padding-top: 2cqw;
+  color: var(--vial-primary);
+  font-size: 1.5cqw;
+  letter-spacing: 0.08em;
+  text-align: center;
+}
+.product-label__stripe {
+  height: 1px;
+  min-height: 1px;
+  margin-top: 2cqw;
+  background: var(--vial-accent);
+}
+.vial-mockup.product-mockup figcaption {
+  position: relative;
+  right: auto;
+  bottom: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 7px;
+  border-top: 1px solid #e4eaf0;
+  font-size: 8px;
+  color: #6b7986;
+  background: #f8fbfd;
+}
+@media (max-width: 600px) {
+  .inquiry-section .partner-inquiry {
+    padding: 0;
+  }
+  .product-preview {
+    margin-top: 14px;
+  }
+  .product-preview .packaging-switch button {
+    min-height: 40px;
+    font-size: 10px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .product-preview .packaging-switch button {
+    transition: none;
+  }
+}
+
+.vial-mockup__live-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--partner-teal);
+  box-shadow: 0 0 0 3px rgb(33 127 140 / 12%);
+}
