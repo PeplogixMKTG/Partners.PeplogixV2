@@ -1,4 +1,4 @@
-/* Keep the landing-page intro and guided form in one visual rhythm. */
+/* The landing-page introduction and guided form share one visual rhythm. */
 .inquiry-section .partner-inquiry {
   max-width: none;
   padding: 0;
@@ -6,7 +6,6 @@
 .inquiry-section .partner-inquiry--success {
   padding: clamp(1.5rem, 4vw, 3rem);
 }
-
 .product-preview {
   margin-top: 16px;
 }
@@ -15,9 +14,9 @@
   align-items: stretch;
   gap: 4px;
   padding: 4px;
-  border: 1px solid #dfe7e9;
-  border-radius: 7px;
-  background: #f0f4f5;
+  border: 1px solid #cddfec;
+  border-radius: 8px;
+  background: #eaf3f9;
 }
 .product-preview .packaging-switch button {
   display: flex;
@@ -25,11 +24,11 @@
   justify-content: center;
   align-items: center;
   gap: 6px;
-  min-height: 36px;
-  padding: 7px 5px;
-  border-radius: 4px;
-  color: #687582;
-  font-size: 10px;
+  min-height: 40px;
+  padding: 8px 5px;
+  border-radius: 5px;
+  color: #46657a;
+  font-size: 12px;
   font-weight: 550;
   line-height: 1.3;
   background: transparent;
@@ -39,23 +38,23 @@
     box-shadow 180ms;
 }
 .product-preview .packaging-switch button[aria-pressed="true"] {
-  color: var(--partner-navy);
-  background: #fff;
-  box-shadow: 0 1px 5px #1018490d;
+  color: #fff;
+  background: var(--partner-navy);
+  box-shadow: 0 2px 6px #003f6a15;
 }
 .product-preview .packaging-switch button svg {
   width: 14px;
   height: 14px;
   flex-shrink: 0;
-  color: var(--partner-teal);
+  color: currentColor;
 }
 .vial-mockup.product-mockup {
   display: block;
   min-height: 0;
-  margin: 10px 0 0;
-  background: #f2f8fc;
-  border: 1px solid #e7edf1;
-  border-radius: 6px;
+  margin: 12px 0 0;
+  border: 1px solid #d6e7f2;
+  border-radius: 8px;
+  background: #e5f5ff;
   overflow: hidden;
 }
 .vial-mockup.product-mockup::before {
@@ -82,15 +81,14 @@
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  padding: 10% 5% 8%;
-  padding: 4cqw 2cqw 2cqw;
-  color: var(--vial-primary);
+  padding: 2cqw 1.2cqw 1cqw;
+  color: #121b23;
   background: linear-gradient(
     90deg,
-    #f4f6f7b0,
-    #ffffffd9 22%,
-    #ffffffc2 65%,
-    #e6eaeea8
+    #f1f4f5e8,
+    #ffffffea 22%,
+    #ffffffe0 65%,
+    #e6eaeee0
   );
   box-shadow:
     inset 1px 0 2px #fff8,
@@ -102,68 +100,100 @@
   left: 25.4%;
   width: 47.6%;
   height: 39%;
-  padding-top: 5cqw;
-  padding-inline: 3cqw;
+  padding: 2.5cqw 1.4cqw 1.5cqw;
 }
 .product-label__logo-wrap {
   display: flex;
   justify-content: center;
   align-items: center;
-  flex: 1;
-  min-height: 0;
-  padding: 0 0 2cqw;
+  min-height: 10cqw;
+  height: 10cqw;
+  width: 85%;
+  margin: 0 auto 2cqw;
+  padding: 1.1cqw;
+  border: 1px solid #1c2c36;
+  border-radius: 1cqw;
+  background: linear-gradient(90deg, #ffffff20, #ffffff80, #ffffff20);
 }
 .product-label .vial-mockup__logo {
   width: 100%;
   max-width: 100%;
   height: 100%;
-  max-height: 15cqw;
+  max-height: 7.5cqw;
   object-fit: contain;
   filter: none;
   mix-blend-mode: multiply;
 }
 .product-label .vial-mockup__placeholder {
-  font-size: 4.1cqw;
-  line-height: 1.2;
-  font-weight: 550;
-  letter-spacing: -0.025em;
-  color: var(--vial-primary);
+  font-size: 3.7cqw;
+  line-height: 1.04;
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  color: #14222e;
   text-shadow: none;
-  white-space: nowrap;
+  text-align: center;
 }
 .product-label__collection {
   display: grid;
   place-items: center;
-  min-height: 7cqw;
-  padding: 1.1cqw 0.6cqw;
+  min-height: 8cqw;
+  padding: 1.1cqw 0.5cqw;
   border: 1px solid var(--vial-secondary);
-  color: var(--vial-secondary);
-  font-size: 2.7cqw;
-  font-weight: 600;
-  letter-spacing: -0.025em;
+  color: var(--vial-primary);
+  font-size: 6cqw;
+  font-weight: 700;
+  letter-spacing: -0.055em;
   text-align: center;
-  line-height: 1.2;
+  line-height: 1.05;
+}
+.product-mockup[data-package="capsules"] .product-label__collection {
+  color: var(--vial-on-primary);
+  background: var(--vial-primary);
+  border-color: var(--vial-primary);
+  letter-spacing: -0.025em;
 }
 .product-label__detail {
-  padding-block: 1.8cqw;
-  color: var(--vial-primary);
-  font-size: 1.1cqw;
-  letter-spacing: 0.025em;
+  align-self: flex-start;
+  margin-top: 1.8cqw;
+  padding: 0.5cqw 1cqw;
+  border: 1px solid #172631;
+  color: #14222e;
+  font-size: 2.2cqw;
+  font-weight: 650;
+  letter-spacing: -0.025em;
   text-align: center;
+  line-height: 1.3;
+}
+.product-mockup[data-package="capsules"] .product-label__detail {
+  align-self: stretch;
+  padding-block: 1.2cqw;
+  border-color: var(--vial-secondary);
+  font-size: 2.6cqw;
+}
+.product-label__research {
+  margin-top: 1.3cqw;
+  color: #14222e;
+  font-size: 1.8cqw;
+  text-align: left;
+  line-height: 1.3;
+}
+.product-mockup[data-package="capsules"] .product-label__research {
+  padding: 1cqw 0.6cqw;
+  border: 1px solid var(--vial-accent);
+  font-size: 1.9cqw;
+  text-align: center;
+  font-weight: 600;
 }
 .product-label__footer {
   margin-top: auto;
-  padding-top: 2cqw;
-  color: var(--vial-primary);
-  font-size: 1.5cqw;
-  letter-spacing: 0.08em;
-  text-align: center;
+  padding-top: 1cqw;
+  color: #42525f;
+  font-size: 1.6cqw;
+  text-align: left;
+  line-height: 1.2;
 }
-.product-label__stripe {
-  height: 1px;
-  min-height: 1px;
-  margin-top: 2cqw;
-  background: var(--vial-accent);
+.product-mockup[data-package="capsules"] .product-label__footer {
+  text-align: center;
 }
 .vial-mockup.product-mockup figcaption {
   position: relative;
@@ -173,11 +203,18 @@
   justify-content: center;
   align-items: center;
   gap: 6px;
-  padding: 10px 7px;
-  border-top: 1px solid #e4eaf0;
-  font-size: 8px;
-  color: #6b7986;
-  background: #f8fbfd;
+  padding: 12px 7px;
+  border-top: 1px solid #d6e7f2;
+  font-size: 10px;
+  color: #41627a;
+  background: #edf6fc;
+}
+.vial-mockup__live-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--partner-coral);
+  box-shadow: 0 0 0 3px #d8603d12;
 }
 @media (max-width: 600px) {
   .inquiry-section .partner-inquiry {
@@ -187,20 +224,12 @@
     margin-top: 14px;
   }
   .product-preview .packaging-switch button {
-    min-height: 40px;
-    font-size: 10px;
+    min-height: 42px;
+    font-size: 11px;
   }
 }
 @media (prefers-reduced-motion: reduce) {
   .product-preview .packaging-switch button {
     transition: none;
   }
-}
-
-.vial-mockup__live-dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--partner-teal);
-  box-shadow: 0 0 0 3px rgb(33 127 140 / 12%);
 }

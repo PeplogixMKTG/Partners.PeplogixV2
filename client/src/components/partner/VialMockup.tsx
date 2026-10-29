@@ -1,5 +1,6 @@
 import { useState, type CSSProperties } from "react";
 import { FlaskConical, Pill } from "lucide-react";
+import { DEFAULT_BRAND_COLORS } from "@shared/brand";
 import "./product-preview.css";
 
 interface VialMockupProps {
@@ -14,16 +15,28 @@ const packaging = {
   vial: {
     image: "/manus-storage/clinical-vial-preview-v2_b0774c91.webp",
     name: "Clinical vial",
-    collection: "VIAL COLLECTION",
+    sampleProduct: "BPC-157",
   },
   capsules: {
     image: "/manus-storage/capsule-bottle-preview-v2_41946d5a.webp",
     name: "Capsule bottle",
-    collection: "CAPSULE COLLECTION",
+    sampleProduct: "DIHEXA",
   },
 } as const;
 
-/** Interactive branding concepts based on the owner's actual packaging references. */
+function readableInk(hex: string) {
+  const channels = [1, 3, 5].map(offset => {
+    const value = Number.parseInt(hex.slice(offset, offset + 2), 16) / 255;
+    return value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4;
+  });
+  const luminance = channels.reduce(
+    (sum, value, index) => sum + value * [0.2126, 0.7152, 0.0722][index],
+    0
+  );
+  return luminance > 0.179 ? "#101C27" : "#FFFFFF";
+}
+
+/** Live branding layout, not a dosage, purity claim, or approved product specification. */
 export function VialMockup({
   logoUrl,
   primaryColor,
@@ -33,8 +46,8 @@ export function VialMockup({
 }: VialMockupProps) {
   const [format, setFormat] = useState<keyof typeof packaging>("vial");
   const colors = colorsNotFinal
-    ? { primary: "#101849", secondary: "#217f8c", accent: "#d2654a" }
-    : { primary: primaryColor, secondary: secondaryColor, accent: accentColor };
+    ? DEFAULT_BRAND_COLORS
+    : { primaryColor, secondaryColor, accentColor };
   const product = packaging[format];
 
   return (
@@ -64,9 +77,10 @@ export function VialMockup({
         data-package={format}
         style={
           {
-            "--vial-primary": colors.primary,
-            "--vial-secondary": colors.secondary,
-            "--vial-accent": colors.accent,
+            "--vial-primary": colors.primaryColor,
+            "--vial-secondary": colors.secondaryColor,
+            "--vial-accent": colors.accentColor,
+            "--vial-on-primary": readableInk(colors.primaryColor),
           } as CSSProperties
         }
         aria-label={`Live visual branding mockup on a ${product.name.toLowerCase()}`}
@@ -90,17 +104,22 @@ export function VialMockup({
                   alt={`Your uploaded logo on the ${product.name.toLowerCase()} label`}
                 />
               ) : (
-                <span className="vial-mockup__placeholder">YOUR BRAND</span>
+                <span
+                  className="vial-mockup__placeholder"
+                  aria-label="Your logo here"
+                >
+                  YOUR
+                  <br />
+                  LOGO HERE
+                </span>
               )}
             </div>
             <div className="product-label__collection">
-              {product.collection}
+              {product.sampleProduct}
             </div>
-            <div className="product-label__detail">
-              YOUR IDENTITY. YOUR COLLECTION.
-            </div>
-            <div className="product-label__footer">BRANDING CONCEPT</div>
-            <div className="product-label__stripe" />
+            <div className="product-label__detail">LABEL CONCEPT</div>
+            <div className="product-label__research">RESEARCH USE ONLY</div>
+            <div className="product-label__footer">Visual concept only</div>
           </div>
         </div>
         <figcaption aria-live="polite">

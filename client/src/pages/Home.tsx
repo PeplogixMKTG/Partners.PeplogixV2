@@ -83,7 +83,7 @@ export default function Home() {
       </header>
 
       <main>
-        <section className="hero-section">
+        <section className="hero-section hero-section--branded">
           <div className="page-wrap hero-layout">
             <div className="hero-copy">
               <div className="eyebrow">
@@ -124,10 +124,10 @@ export default function Home() {
               </div>
               <img
                 className="hero-product-artwork"
-                src="/manus-storage/peplogix-partner-hero-v2_267c012e.webp"
-                alt="Peplogix-style white capsule bottle and clear clinical vial with your-brand concept labeling"
-                width={1400}
-                height={1400}
+                src="/manus-storage/ClinicalPeptideProductTrioMockup_52aebc52.webp"
+                alt="Your-logo-here Peplogix packaging: clinical peptide vial, white capsule bottle, and glass serum bottle with dropper"
+                width={1672}
+                height={941}
                 fetchPriority="high"
                 decoding="async"
               />
@@ -142,7 +142,7 @@ export default function Home() {
                 <ArrowUpRight size={16} aria-hidden="true" />
               </div>
               <p className="hero-product-caption">
-                CAPSULES & VIALS. ONE DISTINCTIVE BRAND.
+                VIALS. CAPSULES. SERUMS. ALL YOURS TO REIMAGINE.
               </p>
             </div>
           </div>
@@ -169,53 +169,52 @@ export default function Home() {
           </div>
         </div>
 
-        <section
-          id="opportunities"
-          className="opportunities section-space page-wrap"
-        >
-          <div className="section-heading">
-            <div>
-              <div className="eyebrow">MORE WAYS TO BUILD TOGETHER</div>
-              <h2>
-                A partnership that
+        <section id="opportunities" className="opportunities section-space">
+          <div className="page-wrap">
+            <div className="section-heading">
+              <div>
+                <div className="eyebrow">MORE WAYS TO BUILD TOGETHER</div>
+                <h2>
+                  A partnership that
+                  <br />
+                  fits <span>your next move.</span>
+                </h2>
+              </div>
+              <p>
+                One starting point. Multiple possibilities.
                 <br />
-                fits <span>your next move.</span>
-              </h2>
+                Choose the support you need today, with room
+                <br className="desktop-break" /> for where you want to go
+                tomorrow.
+              </p>
             </div>
-            <p>
-              One starting point. Multiple possibilities.
-              <br />
-              Choose the support you need today, with room
-              <br className="desktop-break" /> for where you want to go
-              tomorrow.
-            </p>
-          </div>
-          <div className="opportunity-grid">
-            {opportunities.map(({ icon: Icon, title, text, tag }, i) => (
-              <a href="#inquiry" className="opportunity-card" key={title}>
-                <div className="opportunity-top">
-                  <div className="opportunity-icon">
-                    <Icon size={23} strokeWidth={1.5} />
+            <div className="opportunity-grid">
+              {opportunities.map(({ icon: Icon, title, text, tag }, i) => (
+                <a href="#inquiry" className="opportunity-card" key={title}>
+                  <div className="opportunity-top">
+                    <div className="opportunity-icon">
+                      <Icon size={23} strokeWidth={1.5} />
+                    </div>
+                    <span className="opportunity-number">0{i + 1}</span>
                   </div>
-                  <span className="opportunity-number">0{i + 1}</span>
-                </div>
-                <h3>{title}</h3>
-                <p>{text}</p>
-                <div className="opportunity-bottom">
-                  <span>{tag}</span>
-                  <ArrowUpRight size={17} />
-                </div>
+                  <h3>{title}</h3>
+                  <p>{text}</p>
+                  <div className="opportunity-bottom">
+                    <span>{tag}</span>
+                    <ArrowUpRight size={17} />
+                  </div>
+                </a>
+              ))}
+            </div>
+            <div className="other-partnership">
+              <span>
+                Have something else in mind?{" "}
+                <strong>We’re open to the conversation.</strong>
+              </span>
+              <a href="#inquiry">
+                Tell us your idea <ArrowRight size={16} />
               </a>
-            ))}
-          </div>
-          <div className="other-partnership">
-            <span>
-              Have something else in mind?{" "}
-              <strong>We’re open to the conversation.</strong>
-            </span>
-            <a href="#inquiry">
-              Tell us your idea <ArrowRight size={16} />
-            </a>
+            </div>
           </div>
         </section>
 

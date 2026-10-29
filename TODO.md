@@ -609,8 +609,20 @@ Replace the previous tall decorative hero vials and carton with capsule bottle a
 
 Fix inconsistent section spacing on desktop/mobile, including redundant form introductions. Remove the entire A LITTLE MORE CLARITY / Before you begin FAQ section and unused code/styles. Preserve the secure inquiry backend.
 
-## [ ] Confirmed brand colors
+## [x] Confirmed brand colors
 
-Apply exact brand color codes when supplied. Current user message has two product photographs but no color codes or swatch attachment, so retain the current palette pending values.
+Apply exact brand color codes when supplied. The palette was originally pending; the user supplied blue #003F6A and orange #D8603D in the October 29, 14:52 message. Apply these exact interface colors while retaining original logo artwork.
 
 Verification: desktop1440 and mobile390 through stable Preview loaded new images, no FAQ/duplicate inquiry intro, measured intro-to-form gaps32px/28px, zero form top padding, no horizontal overflow or JavaScript errors. Both packaging views preserve live colors/logo across switching; reset removes test upload and restores defaults. TypeScript, 17tests and production build passed. Exact brand values remain pending. Earlier publish request was cancelled; this update is for Preview/checkpoint, not claimed live publication.
+
+## [x] Supplied product-trio hero and reference-matched live labels
+
+Use the attached ClinicalPeptideProductTrioMockup.png as the hero banner image, with all products and original label content preserved. Match the live vial and capsule preview label styling to this reference, including YOUR LOGO HERE placeholder, framed logo region, outlined vial product band, filled-blue capsule product band, and orange detail accent. Preserve live uploads, logo proportions, color updates and reset, with a visual-only disclaimer and no fabricated dosage/purity claims.
+
+## [x] Richer section colors and readable copy
+
+Make the page more colorful and polished using exact blue #003F6A and orange #D8603D, coordinated section backgrounds and stronger color contrast. Increase paragraph font sizes for easier reading across marketing sections and the inquiry without introducing spacing problems, horizontal overflow or new pages. Keep FAQ removed and retain all secure submission logic.
+
+### Confirmed palette refresh evidence
+
+Exact #003F6A blue and #D8603D orange are applied to interface tokens, CTA backgrounds, section surfaces, form styling, team-page styling, metadata, preview defaults and reset. Original logo artwork retained. Supplied hero image rendered at original aspect with object-fit contain. Desktop1440, tablet768, mobile390 and small-mobile320 checks passed with no horizontal overflow or JavaScript errors. Hero body18/17/16px, marketing body16pxdesktop and15pxmobile, inquiry descriptions16px. Reference-style vial/capsule label preview, two-line YOUR LOGO HERE, uploaded-logo switching and cleanup, readable custom-color ink and reset passed. The old hero CSS-cascade conflict was fixed by scoping the branded hero. TypeScript, existing17server tests and production build passed. These are Preview changes; prior cancelled publication is not retried without a new publish request.

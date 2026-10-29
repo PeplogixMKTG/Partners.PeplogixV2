@@ -1,3 +1,4 @@
+import { DEFAULT_BRAND_COLORS } from "./brand";
 import { z } from "zod";
 
 export const businessTypeOptions = [
@@ -203,9 +204,7 @@ export const createEmptyPartnerForm = (): PartnerFormData => ({
   products: [],
   monthlyVolume: "",
   needs: "",
-  primaryColor: "#101849",
-  secondaryColor: "#217f8c",
-  accentColor: "#d2654a",
+  ...DEFAULT_BRAND_COLORS,
   colorsNotFinal: false,
   brandingInstructions: "",
   storefrontType: "",
