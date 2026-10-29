@@ -73,7 +73,18 @@
   object-fit: contain;
 }
 .product-mockup[data-package="vial"] .reference-vial {
+  position: relative;
+  width: 58.542576%;
+  height: 100%;
+  margin-inline: auto;
   aspect-ratio: 858 / 1832;
+  container-type: inline-size;
+}
+.capsule-scene {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  container-type: inline-size;
 }
 .reference-vial .reference-vial__logo {
   position: absolute;

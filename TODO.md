@@ -638,3 +638,9 @@ Verification: all three orange-button CSS definitions use #fff; icons inherit cu
 Use the newly supplied close-up vial screenshot as the live clinical-vial reference: match its broad gray cap, silver crimp, clear glass, white label and reflected glass base. Remove YOUR LOGO HERE and its placeholder outline from the live preview, leaving the logo area clean white until an uploaded logo is present. Preserve uploaded-logo proportions and live colors, retain a visual-only disclaimer, and keep the hero image unchanged.
 
 Verification: focused desktop1440/mobile390 checks confirmed the new vial asset loaded at natural proportions, no live YOUR LOGO HERE placeholder or default frame, uploaded-logo placement/format switching/removal, custom colors and reset, no horizontal overflow or JavaScript errors, and unchanged hero. Only the exact temporary test upload was removed by its private capability; no inquiry was submitted.
+
+## [x] Equal vial and capsule preview dimensions — October 29, 15:38
+
+Make the live vial preview the same width and height as the capsule preview, with a shared 4:5 preview stage and identical card dimensions when switching formats. Fit the full vial reference without cropping or stretching. Keep uploaded logos and live label-color overlays aligned to the vial's actual image, and retain the plain-white default logo area.
+
+Verification: desktop and mobile measured identical vial/capsule stage and frame dimensions (frame heights370.47pxdesktop and398.52pxmobile). The full vial retains its source aspect without clipping, and its uploaded logo/color overlays stay within the centered image scene. Blank default logo area, switching, reset and no-overflow checks passed.

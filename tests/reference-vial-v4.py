@@ -29,6 +29,8 @@ with sync_playwright() as p:
         page.wait_for_function('document.querySelector(".product-photo").complete && document.querySelector(".product-photo").naturalWidth>0')
         expect(page.locator('.reference-vial__logo')).to_have_count(0)
         expect(page.locator('.reference-vial__band')).to_have_count(0)
+        vialDimensions=page.locator('.product-mockup').bounding_box()
+        vialStage=page.locator('.product-stage').bounding_box()
         image=page.locator('.product-photo').evaluate('(i)=>({natural:i.naturalWidth/i.naturalHeight,rendered:i.clientWidth/i.clientHeight})')
         assert abs(image['natural']-image['rendered'])<.01,image
         page.locator('.partner-mockup-card').screenshot(path=str(OUT/f'{name}-blank-reference-vial.png'))
@@ -56,6 +58,12 @@ with sync_playwright() as p:
         expect(page.locator('.vial-mockup__placeholder')).to_have_count(0)
         expect(page.locator('.product-label__logo-wrap')).to_have_css('border-top-style','none')
         expect(page.locator('.product-label__logo-wrap')).to_have_css('background-color','rgb(255, 255, 255)')
+        capsuleDimensions=page.locator('.product-mockup').bounding_box()
+        capsuleStage=page.locator('.product-stage').bounding_box()
+        for key in ['width','height']:
+            assert abs(vialDimensions[key]-capsuleDimensions[key])<1,(vialDimensions,capsuleDimensions)
+            assert abs(vialStage[key]-capsuleStage[key])<1,(vialStage,capsuleStage)
+        print(name,'identical preview dimensions',{'vial':vialDimensions['height'],'capsule':capsuleDimensions['height']},flush=True)
         assert page.evaluate('document.documentElement.scrollWidth')==width
         assert not errors,errors
         results.append({'viewport':name,'sourceAspectPreserved':image,'blankLogoArea':True,'hero':'unchanged','liveColors':'preserved','errors':errors})

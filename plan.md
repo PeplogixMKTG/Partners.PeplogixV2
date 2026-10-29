@@ -39,3 +39,7 @@ Per the user's explicit preference, orange buttons use white text and icons rath
 ## Close-up reference vial refinement — October 29, 15:31
 
 Match the clinical-vial live preview to the newly supplied close-up screenshot through a narrowly scoped image edit: remove only the logo placeholder and frame, preserving the remaining reference photograph and label. Use a reference-proportioned stage, place uploaded logos in the now-white top label region, and preserve the product-band color customization through a fitted interface overlay. Remove default YOUR LOGO HERE text from the live preview while leaving the hero unchanged. All displayed dose/purity text comes from the supplied reference photograph, not a new product claim; the existing visual-only/unapproved-packaging disclaimer remains.
+
+## Equal preview dimensions — October 29, 15:38
+
+Both formats use the existing capsule-size 4:5 stage. Place the tall reference vial in a centered, natural-aspect inner image scene that contains the photo and its live overlays, so its full image remains undistorted while the outer preview has identical dimensions to the capsule preview.

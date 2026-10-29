@@ -97,63 +97,65 @@ export function VialMockup({
         }
         aria-label={`Live visual branding mockup on a ${product.name.toLowerCase()}`}
       >
-        <div
-          className={`product-stage${format === "vial" ? " reference-vial" : ""}`}
-        >
-          <img
-            className="product-photo"
-            src={product.image}
-            alt={
-              format === "vial"
-                ? "Reference-matched clinical vial with broad gray cap, silver crimp, clear glass, BPC-157 example label, and a blank white logo area"
-                : "Reference-matched capsule bottle with a customizable white label"
-            }
-            width={product.width}
-            height={product.height}
-            loading="lazy"
-            decoding="async"
-          />
-          {format === "vial" ? (
-            <>
-              {logoUrl && (
-                <img
-                  className="reference-vial__logo vial-mockup__logo"
-                  src={logoUrl}
-                  alt="Your uploaded logo printed in the clinical vial's white logo area"
-                />
-              )}
-              {customProductColors && (
-                <div className="reference-vial__band">
-                  {product.sampleProduct}
-                </div>
-              )}
-              {customAccent && (
-                <div className="reference-vial__detail">10 MG</div>
-              )}
-            </>
-          ) : (
-            <div className="product-label">
-              <div
-                className="product-label__logo-wrap"
-                data-empty={!logoUrl}
-                aria-label={!logoUrl ? "Blank white logo area" : undefined}
-              >
+        <div className="product-stage">
+          <div
+            className={format === "vial" ? "reference-vial" : "capsule-scene"}
+          >
+            <img
+              className="product-photo"
+              src={product.image}
+              alt={
+                format === "vial"
+                  ? "Reference-matched clinical vial with broad gray cap, silver crimp, clear glass, BPC-157 example label, and a blank white logo area"
+                  : "Reference-matched capsule bottle with a customizable white label"
+              }
+              width={product.width}
+              height={product.height}
+              loading="lazy"
+              decoding="async"
+            />
+            {format === "vial" ? (
+              <>
                 {logoUrl && (
                   <img
-                    className="vial-mockup__logo"
+                    className="reference-vial__logo vial-mockup__logo"
                     src={logoUrl}
-                    alt="Your uploaded logo on the capsule bottle label"
+                    alt="Your uploaded logo printed in the clinical vial's white logo area"
                   />
                 )}
+                {customProductColors && (
+                  <div className="reference-vial__band">
+                    {product.sampleProduct}
+                  </div>
+                )}
+                {customAccent && (
+                  <div className="reference-vial__detail">10 MG</div>
+                )}
+              </>
+            ) : (
+              <div className="product-label">
+                <div
+                  className="product-label__logo-wrap"
+                  data-empty={!logoUrl}
+                  aria-label={!logoUrl ? "Blank white logo area" : undefined}
+                >
+                  {logoUrl && (
+                    <img
+                      className="vial-mockup__logo"
+                      src={logoUrl}
+                      alt="Your uploaded logo on the capsule bottle label"
+                    />
+                  )}
+                </div>
+                <div className="product-label__collection">
+                  {product.sampleProduct}
+                </div>
+                <div className="product-label__detail">LABEL CONCEPT</div>
+                <div className="product-label__research">RESEARCH USE ONLY</div>
+                <div className="product-label__footer">Visual concept only</div>
               </div>
-              <div className="product-label__collection">
-                {product.sampleProduct}
-              </div>
-              <div className="product-label__detail">LABEL CONCEPT</div>
-              <div className="product-label__research">RESEARCH USE ONLY</div>
-              <div className="product-label__footer">Visual concept only</div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
         <figcaption aria-live="polite">
           <span className="vial-mockup__live-dot" /> {product.name} · live
