@@ -37,7 +37,7 @@ const styles = `
 .dashboard-user { display: flex; align-items: center; gap: 12px; font-size: 13px; color: #536070; white-space: nowrap; }
 .dashboard-user strong { display: block; color: #003F6A; font-size: 13px; }
 .dashboard-user span { display: block; font-size: 11px; color: #003F6A; font-weight: 750; letter-spacing: .08em; text-transform: uppercase; }
-.dashboard-button { appearance: none; border: 1px solid transparent; border-radius: 7px; padding: 10px 14px; background: #D8603D; color: #101C27; cursor: pointer; font: inherit; font-size: 13px; font-weight: 750; line-height: 1.1; transition: background .18s ease, transform .18s ease, box-shadow .18s ease; }
+.dashboard-button { appearance: none; border: 1px solid transparent; border-radius: 7px; padding: 10px 14px; background: #D8603D; color: #fff; cursor: pointer; font: inherit; font-size: 13px; font-weight: 750; line-height: 1.1; transition: background .18s ease, transform .18s ease, box-shadow .18s ease; }
 .dashboard-button:hover:not(:disabled) { background: #b85440; transform: translateY(-1px); box-shadow: 0 5px 13px rgba(204,98,76,.18); }
 .dashboard-button:focus-visible, .dashboard-row:focus-visible { outline: 3px solid rgba(0,63,106,.35); outline-offset: 2px; }
 .dashboard-button:disabled { cursor: wait; opacity: .62; }

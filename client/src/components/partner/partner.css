@@ -1156,7 +1156,7 @@
 }
 .partner-button--primary {
   background: var(--partner-coral);
-  color: #101c27;
+  color: #fff;
   box-shadow: 0 5px 12px rgb(216 96 61 / 22%);
 }
 .partner-button--primary:hover:not(:disabled) {

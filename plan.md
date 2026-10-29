@@ -31,3 +31,7 @@ Use supplied capsule-bottle and clinical-vial photos as physical-packaging refer
 ## Confirmed palette and richer page treatment — October 29, 14:52
 
 The user confirmed blue #003F6A and orange #D8603D. These supersede the previous inferred navy/teal/coral palette for interface colors. Preserve the supplied logo artwork. Use the exact supplied ClinicalPeptideProductTrioMockup.png in the hero, re-encoded to WebP without cropping or altering label content. Expand the hero product area for the landscape aspect ratio. Enrich the page with a sky-blue hero, a branded blue capability band, pale-blue opportunity section with white and warm-tinted cards, deep brand-blue process section with white text and orange accents, and a light-blue inquiry background around the white form. Increase primary descriptive text to 16–18px on desktop and 15–16px mobile with restrained, readable line lengths. Live vial/capsule mockups retain existing accurate photographic packaging bases but their printed label hierarchy now matches the supplied reference: framed YOUR / LOGO HERE placeholder, blue product field (outline for vial, filled for capsule), framed detail and orange research-use accent; no invented dosage or purity specifications. Keep all inquiry/secure-upload logic unchanged; update preview defaults/reset to brand colors.
+
+## Button lettering refinement — October 29, 15:28
+
+Per the user's explicit preference, orange buttons use white text and icons rather than the previous dark lettering. Preserve button backgrounds, sizes, actions, and all other page styling.

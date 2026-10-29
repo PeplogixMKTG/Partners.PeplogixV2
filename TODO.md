@@ -626,3 +626,9 @@ Make the page more colorful and polished using exact blue #003F6A and orange #D8
 ### Confirmed palette refresh evidence
 
 Exact #003F6A blue and #D8603D orange are applied to interface tokens, CTA backgrounds, section surfaces, form styling, team-page styling, metadata, preview defaults and reset. Original logo artwork retained. Supplied hero image rendered at original aspect with object-fit contain. Desktop1440, tablet768, mobile390 and small-mobile320 checks passed with no horizontal overflow or JavaScript errors. Hero body18/17/16px, marketing body16pxdesktop and15pxmobile, inquiry descriptions16px. Reference-style vial/capsule label preview, two-line YOUR LOGO HERE, uploaded-logo switching and cleanup, readable custom-color ink and reset passed. The old hero CSS-cascade conflict was fixed by scoping the branded hero. TypeScript, existing17server tests and production build passed. These are Preview changes; prior cancelled publication is not retried without a new publish request.
+
+## [x] White text on orange buttons — October 29, 15:28
+
+Use white text and inherited white icons, not black, on all orange buttons across the public page, guided inquiry, and team dashboard. Keep existing orange backgrounds, spacing, typography, button actions, and quiet/secondary button styles unchanged.
+
+Verification: all three orange-button CSS definitions use #fff; icons inherit currentColor. TypeScript, production build and diff checks passed. Backgrounds and secondary/quiet button styles are unchanged.
