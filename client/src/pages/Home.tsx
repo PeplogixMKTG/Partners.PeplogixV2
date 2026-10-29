@@ -124,7 +124,7 @@ export default function Home() {
               </div>
               <img
                 className="hero-product-artwork"
-                src="/manus-storage/ClinicalPeptideProductTrioMockup_52aebc52.webp"
+                src="/manus-storage/PremiumBlueResearchSkincareCollection_d54940d7.webp"
                 alt="Your-logo-here Peplogix packaging: clinical peptide vial, white capsule bottle, and glass serum bottle with dropper"
                 width={1672}
                 height={941}

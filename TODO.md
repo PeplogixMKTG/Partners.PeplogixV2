@@ -650,3 +650,9 @@ Verification: desktop and mobile measured identical vial/capsule stage and frame
 Remove the live-vial photo's blue background so the vial sits on the same near-white background treatment as the capsule preview. Preserve the reference vial, blank logo area, equal preview dimensions and live logo/color behavior. Keep the hero and capsule product image unchanged.
 
 Verification: native-alpha PNG/WebP confirmed transparent exterior, original858×1832 dimensions retained. Transparent vial asset loaded over the shared near-white gradient sampled from capsule-image edges. Desktop/mobile checks passed for equal frame dimensions, matching stage backgrounds, natural proportions, blank default logo area, uploaded-logo switching/cleanup, colors and reset, no overflow/errors. Hero/capsule images unchanged. TypeScript and production build passed.
+
+## [x] Replacement hero image — October 29, 15:46
+
+Replace the banner with the supplied PremiumBlueResearchSkincareCollection.png, preserving the full image and its original proportions. Keep current page styling and all live-preview assets and behavior unchanged.
+
+Verification: supplied replacement is1672×941, re-encoded158886-byte WebP, confirmed200 image/webp from managed storage. Hero URL updated; original width/height and object-fit contain preserved. Live-preview assets, dimensions, controls and styles unchanged.

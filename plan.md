@@ -47,3 +47,7 @@ Both formats use the existing capsule-size 4:5 stage. Place the tall reference v
 ## Vial background removal — October 29, 15:40
 
 Use native-alpha image editing to remove the blue studio backdrop and floor from the live-vial asset. Preserve the reference vial and label, and place it over a near-white stage background matching the capsule photo's edge treatment. Retain equal-sized preview frames, natural image proportions and the existing live overlays. No hero or capsule-image edits.
+
+## Replacement banner — October 29, 15:46
+
+Replace only the hero image binding with the supplied PremiumBlueResearchSkincareCollection.png, re-encoded without cropping at its original1672×941 dimensions. Keep the approved hero layout and all live-preview assets and behavior unchanged.

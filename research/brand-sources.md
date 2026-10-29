@@ -22,3 +22,7 @@ The user supplied Screenshot2026-10-29at3.30.15PM.png as the desired live-vial r
 ## Transparent live-vial background — October 29, 15:40
 
 Native-alpha background removal preserved the reference vial/blank logo area and removed the blue studio background and external floor reflection. Asset858×1832 stored at `/manus-storage/reference-vial-transparent-v5_18d10a91.webp`; alpha0–255 survives WebP conversion. Shared preview background follows existing capsule-image edge colors (#F3F9FE upper, #EEF7FF middle, #F4FBFD bottom). Capsule image and hero unchanged.
+
+## Latest supplied hero — October 29, 15:46
+
+PremiumBlueResearchSkincareCollection.png supplied by the owner replaces the previous hero only. Full1672×941 composition preserved in WebP at `/manus-storage/PremiumBlueResearchSkincareCollection_d54940d7.webp`. No generative editing, cropping, or live-preview changes.

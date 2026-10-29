@@ -14,7 +14,7 @@ with sync_playwright() as p:
         page.on('pageerror',lambda error:errors.append(str(error)))
         page.goto(BASE,wait_until='domcontentloaded')
         page.wait_for_selector('#company')
-        expect(page.locator('.hero-product-artwork')).to_have_attribute('src','/manus-storage/ClinicalPeptideProductTrioMockup_52aebc52.webp')
+        expect(page.locator('.hero-product-artwork')).to_have_attribute('src','/manus-storage/PremiumBlueResearchSkincareCollection_d54940d7.webp')
         for key,value in {'company':'Reference preview check','firstName':'Vial','lastName':'Preview','email':'reference@example.com','phone':'2025550136'}.items():
             page.locator('#'+key).fill(value)
         page.locator('input[name="hasWebsite"][value="No"]').check(force=True)
