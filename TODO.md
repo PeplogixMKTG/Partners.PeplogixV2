@@ -632,3 +632,9 @@ Exact #003F6A blue and #D8603D orange are applied to interface tokens, CTA backg
 Use white text and inherited white icons, not black, on all orange buttons across the public page, guided inquiry, and team dashboard. Keep existing orange backgrounds, spacing, typography, button actions, and quiet/secondary button styles unchanged.
 
 Verification: all three orange-button CSS definitions use #fff; icons inherit currentColor. TypeScript, production build and diff checks passed. Backgrounds and secondary/quiet button styles are unchanged.
+
+## [x] Exact reference vial and plain-white logo area — October 29, 15:31
+
+Use the newly supplied close-up vial screenshot as the live clinical-vial reference: match its broad gray cap, silver crimp, clear glass, white label and reflected glass base. Remove YOUR LOGO HERE and its placeholder outline from the live preview, leaving the logo area clean white until an uploaded logo is present. Preserve uploaded-logo proportions and live colors, retain a visual-only disclaimer, and keep the hero image unchanged.
+
+Verification: focused desktop1440/mobile390 checks confirmed the new vial asset loaded at natural proportions, no live YOUR LOGO HERE placeholder or default frame, uploaded-logo placement/format switching/removal, custom colors and reset, no horizontal overflow or JavaScript errors, and unchanged hero. Only the exact temporary test upload was removed by its private capability; no inquiry was submitted.

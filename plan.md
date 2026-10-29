@@ -35,3 +35,7 @@ The user confirmed blue #003F6A and orange #D8603D. These supersede the previous
 ## Button lettering refinement — October 29, 15:28
 
 Per the user's explicit preference, orange buttons use white text and icons rather than the previous dark lettering. Preserve button backgrounds, sizes, actions, and all other page styling.
+
+## Close-up reference vial refinement — October 29, 15:31
+
+Match the clinical-vial live preview to the newly supplied close-up screenshot through a narrowly scoped image edit: remove only the logo placeholder and frame, preserving the remaining reference photograph and label. Use a reference-proportioned stage, place uploaded logos in the now-white top label region, and preserve the product-band color customization through a fitted interface overlay. Remove default YOUR LOGO HERE text from the live preview while leaving the hero unchanged. All displayed dose/purity text comes from the supplied reference photograph, not a new product claim; the existing visual-only/unapproved-packaging disclaimer remains.

@@ -72,6 +72,53 @@
   height: 100%;
   object-fit: contain;
 }
+.product-mockup[data-package="vial"] .reference-vial {
+  aspect-ratio: 858 / 1832;
+}
+.reference-vial .reference-vial__logo {
+  position: absolute;
+  top: 36.842%;
+  left: 24.332%;
+  width: 59.358%;
+  height: 10.401%;
+  object-fit: contain;
+  padding: 1.2cqw;
+  filter: none;
+  mix-blend-mode: multiply;
+}
+.reference-vial__band,
+.reference-vial__detail {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(90deg, #fff, #f2f4f5 90%);
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 700;
+  line-height: 1;
+}
+.reference-vial__band {
+  top: 49.624%;
+  left: 18.984%;
+  width: 75.668%;
+  height: 10.276%;
+  border: 0.5cqw solid var(--vial-secondary);
+  border-radius: 1cqw 0 0 1cqw;
+  color: var(--vial-primary);
+  font-size: 13.5cqw;
+  letter-spacing: -0.055em;
+}
+.reference-vial__detail {
+  top: 62.406%;
+  left: 24.064%;
+  width: 44.385%;
+  height: 6.516%;
+  border: 0.5cqw solid var(--vial-accent);
+  border-radius: 0.8cqw;
+  color: #111;
+  font-size: 11.5cqw;
+  letter-spacing: -0.04em;
+}
 .product-label {
   position: absolute;
   top: 40.4%;
@@ -115,6 +162,10 @@
   border-radius: 1cqw;
   background: linear-gradient(90deg, #ffffff20, #ffffff80, #ffffff20);
 }
+.product-label__logo-wrap[data-empty="true"] {
+  border: none;
+  background: #fff;
+}
 .product-label .vial-mockup__logo {
   width: 100%;
   max-width: 100%;
@@ -123,15 +174,6 @@
   object-fit: contain;
   filter: none;
   mix-blend-mode: multiply;
-}
-.product-label .vial-mockup__placeholder {
-  font-size: 3.7cqw;
-  line-height: 1.04;
-  font-weight: 700;
-  letter-spacing: -0.035em;
-  color: #14222e;
-  text-shadow: none;
-  text-align: center;
 }
 .product-label__collection {
   display: grid;
