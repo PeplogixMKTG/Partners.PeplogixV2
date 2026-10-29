@@ -31,6 +31,8 @@ with sync_playwright() as p:
         expect(page.locator('.reference-vial__band')).to_have_count(0)
         vialDimensions=page.locator('.product-mockup').bounding_box()
         vialStage=page.locator('.product-stage').bounding_box()
+        sharedBackground=page.locator('.product-stage').evaluate('(el)=>getComputedStyle(el).backgroundImage')
+        assert 'rgb(243, 249, 254)' in sharedBackground,sharedBackground
         image=page.locator('.product-photo').evaluate('(i)=>({natural:i.naturalWidth/i.naturalHeight,rendered:i.clientWidth/i.clientHeight})')
         assert abs(image['natural']-image['rendered'])<.01,image
         page.locator('.partner-mockup-card').screenshot(path=str(OUT/f'{name}-blank-reference-vial.png'))
@@ -60,6 +62,7 @@ with sync_playwright() as p:
         expect(page.locator('.product-label__logo-wrap')).to_have_css('background-color','rgb(255, 255, 255)')
         capsuleDimensions=page.locator('.product-mockup').bounding_box()
         capsuleStage=page.locator('.product-stage').bounding_box()
+        assert page.locator('.product-stage').evaluate('(el)=>getComputedStyle(el).backgroundImage')==sharedBackground
         for key in ['width','height']:
             assert abs(vialDimensions[key]-capsuleDimensions[key])<1,(vialDimensions,capsuleDimensions)
             assert abs(vialStage[key]-capsuleStage[key])<1,(vialStage,capsuleStage)

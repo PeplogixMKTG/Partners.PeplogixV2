@@ -644,3 +644,9 @@ Verification: focused desktop1440/mobile390 checks confirmed the new vial asset 
 Make the live vial preview the same width and height as the capsule preview, with a shared 4:5 preview stage and identical card dimensions when switching formats. Fit the full vial reference without cropping or stretching. Keep uploaded logos and live label-color overlays aligned to the vial's actual image, and retain the plain-white default logo area.
 
 Verification: desktop and mobile measured identical vial/capsule stage and frame dimensions (frame heights370.47pxdesktop and398.52pxmobile). The full vial retains its source aspect without clipping, and its uploaded logo/color overlays stay within the centered image scene. Blank default logo area, switching, reset and no-overflow checks passed.
+
+## [x] Transparent vial background matching capsule preview — October 29, 15:40
+
+Remove the live-vial photo's blue background so the vial sits on the same near-white background treatment as the capsule preview. Preserve the reference vial, blank logo area, equal preview dimensions and live logo/color behavior. Keep the hero and capsule product image unchanged.
+
+Verification: native-alpha PNG/WebP confirmed transparent exterior, original858×1832 dimensions retained. Transparent vial asset loaded over the shared near-white gradient sampled from capsule-image edges. Desktop/mobile checks passed for equal frame dimensions, matching stage backgrounds, natural proportions, blank default logo area, uploaded-logo switching/cleanup, colors and reset, no overflow/errors. Hero/capsule images unchanged. TypeScript and production build passed.

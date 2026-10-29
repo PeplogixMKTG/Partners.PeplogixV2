@@ -18,3 +18,7 @@ The owner confirmed interface blue #003F6A and orange #D8603D. The attached Clin
 ## Live close-up vial reference — October 29, 15:31
 
 The user supplied Screenshot2026-10-29at3.30.15PM.png as the desired live-vial reference. A scoped image edit removed only the boxed YOUR LOGO HERE placeholder while preserving the vial, cap/crimp, glass, reflection and other reference label content. Edited asset858×1832, optimized104326-byte WebP, stored `/manus-storage/reference-vial-blank-logo-v4_92f4ee5e.webp`. Live preview uses the photograph at its natural aspect ratio, uploaded logos in the white area, and conditional product-band/dose-box color overlays only when colors are customized. Existing unapproved-packaging disclaimer retained; hero asset unchanged. Capsule default logo area is also white and has no placeholder text or frame.
+
+## Transparent live-vial background — October 29, 15:40
+
+Native-alpha background removal preserved the reference vial/blank logo area and removed the blue studio background and external floor reflection. Asset858×1832 stored at `/manus-storage/reference-vial-transparent-v5_18d10a91.webp`; alpha0–255 survives WebP conversion. Shared preview background follows existing capsule-image edge colors (#F3F9FE upper, #EEF7FF middle, #F4FBFD bottom). Capsule image and hero unchanged.

@@ -54,7 +54,7 @@
   margin: 12px 0 0;
   border: 1px solid #d6e7f2;
   border-radius: 8px;
-  background: #e5f5ff;
+  background: #f3f9fe;
   overflow: hidden;
 }
 .vial-mockup.product-mockup::before {
@@ -65,6 +65,7 @@
   width: 100%;
   aspect-ratio: 4 / 5;
   container-type: inline-size;
+  background: linear-gradient(180deg, #f3f9fe, #eef7ff 50%, #f4fbfd);
 }
 .product-photo {
   display: block;

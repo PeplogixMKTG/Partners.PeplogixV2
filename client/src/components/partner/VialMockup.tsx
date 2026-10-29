@@ -13,7 +13,7 @@ interface VialMockupProps {
 
 const packaging = {
   vial: {
-    image: "/manus-storage/reference-vial-blank-logo-v4_92f4ee5e.webp",
+    image: "/manus-storage/reference-vial-transparent-v5_18d10a91.webp",
     width: 858,
     height: 1832,
     name: "Clinical vial",

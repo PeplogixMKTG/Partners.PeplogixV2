@@ -43,3 +43,7 @@ Match the clinical-vial live preview to the newly supplied close-up screenshot t
 ## Equal preview dimensions — October 29, 15:38
 
 Both formats use the existing capsule-size 4:5 stage. Place the tall reference vial in a centered, natural-aspect inner image scene that contains the photo and its live overlays, so its full image remains undistorted while the outer preview has identical dimensions to the capsule preview.
+
+## Vial background removal — October 29, 15:40
+
+Use native-alpha image editing to remove the blue studio backdrop and floor from the live-vial asset. Preserve the reference vial and label, and place it over a near-white stage background matching the capsule photo's edge treatment. Retain equal-sized preview frames, natural image proportions and the existing live overlays. No hero or capsule-image edits.
