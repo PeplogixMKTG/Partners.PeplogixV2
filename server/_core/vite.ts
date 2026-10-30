@@ -11,6 +11,15 @@ export async function setupVite(app: Express, server: Server) {
     middlewareMode: true,
     hmr: { server },
     allowedHosts: true as const,
+    // The Sandbox filesystem includes system symlink loops outside this project.
+    // Poll only the relevant project files so an HMR watcher cannot follow them.
+    watch: {
+      usePolling: true,
+      interval: 1000,
+      binaryInterval: 1000,
+      followSymlinks: false,
+      ignored: ["**/node_modules/**", "**/.git/**", "**/.manus-logs/**", "**/dist/**"],
+    },
   };
 
   const vite = await createViteServer({

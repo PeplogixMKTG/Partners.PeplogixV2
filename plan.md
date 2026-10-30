@@ -63,3 +63,7 @@ The pre-React static fallback previously rendered the 1600×684 logo without sty
 ### Asset-delivery correction
 
 The approved hero image is served from `client/public/brand/peplogix-partner-hero.webp` rather than a managed-storage route, keeping the exact1672×941 owner-supplied composition while ensuring it loads reliably on fresh local, Preview and mobile sessions. Update the preload and all hero assertions to the public path.
+
+## Preview watcher recovery — October 30
+
+The development Preview process crashed while Vite followed a sandbox symlink loop under `/run/udev/watch/1`, leaving the platform “Setting up your project” fallback. The embedded Vite middleware now enables polling, disables symlink following, and ignores dependency/build/Git/debug-log directories. Start the temporary development listener with polling enabled as well. This affects only development Preview file watching; the production build remains unchanged. The gateway’s yellow temporary-preview status is expected until the user explicitly publishes a deployed version.
