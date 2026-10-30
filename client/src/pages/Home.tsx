@@ -68,7 +68,14 @@ export default function Home() {
             href="#"
             aria-label="Peplogix Partners home"
           >
-            <img src="/brand/peplogix-logo.webp" alt="Peplogix peptides" />
+            <img
+              src="/brand/peplogix-logo.webp"
+              alt="Peplogix peptides"
+              width={1600}
+              height={684}
+              fetchPriority="high"
+              decoding="sync"
+            />
             <span className="brand-separator" />
             <span className="partner-word">PARTNERS</span>
           </a>
@@ -124,7 +131,7 @@ export default function Home() {
               </div>
               <img
                 className="hero-product-artwork"
-                src="/manus-storage/PremiumBlueResearchSkincareCollection_d54940d7.webp"
+                src="/brand/peplogix-partner-hero.webp"
                 alt="Your-logo-here Peplogix packaging: clinical peptide vial, white capsule bottle, and glass serum bottle with dropper"
                 width={1672}
                 height={941}

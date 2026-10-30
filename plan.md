@@ -55,3 +55,11 @@ Replace only the hero image binding with the supplied PremiumBlueResearchSkincar
 ## Catalog-interest replacement — October 30
 
 Replace the single shared catalog-interest constant with the user's exact 21 provided labels and remove every old label, including the former catch-all. Because inquiry UI search, selection, review, client/server validation, persisted payloads and dashboard rendering share the same `products` model, no backend schema or workflow changes are needed. Update the focused browser checks from any removed selection to a retained option and verify the complete replacement list is the only catalog list surfaced.
+
+## Landing-logo stability and responsive QA — October 30
+
+The pre-React static fallback previously rendered the 1600×684 logo without stylesheet constraints, then snapped to the application header on mount. Replace it with a critical styled boot shell that reserves the same header, logo, hero and product-image geometry as the React landing screen. Preload the logo and hero asset; add intrinsic logo dimensions, exact aspect ratio and high fetch priority to both the boot and React header. The boot marker is removed immediately before React mounts. Validate first paint at desktop and mobile widths plus hero/header CTA navigation, guided form step navigation, new-catalog search/selection, package switching, color reset, no horizontal overflow, logo uploads/removal/reset through the existing focused preview regression, server tests, and production build. No real inquiry is submitted for UI QA.
+
+### Asset-delivery correction
+
+The approved hero image is served from `client/public/brand/peplogix-partner-hero.webp` rather than a managed-storage route, keeping the exact1672×941 owner-supplied composition while ensuring it loads reliably on fresh local, Preview and mobile sessions. Update the preload and all hero assertions to the public path.

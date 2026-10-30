@@ -29,7 +29,7 @@ with sync_playwright() as p:
  with page.expect_response(lambda r:r.request.method=='DELETE' and r.url.endswith(asset_id)) as deleted:
   page.get_by_role('button',name='Remove',exact=True).click()
  assert deleted.value.status==204,deleted.value.text()
- expect(page.locator('.vial-mockup__placeholder')).to_have_text('YOUR BRAND')
+ expect(page.locator('.reference-vial__logo')).to_have_count(0)
  # Reset and replaced files preserve live mockup behavior.
  with page.expect_response(lambda r:r.url.endswith('/api/partner/upload') and r.request.method=='POST') as uploaded:
   page.get_by_label('Upload a logo',exact=True).set_input_files('client/public/brand/favicon-64.png')
@@ -38,8 +38,8 @@ with sync_playwright() as p:
  page.get_by_label('Primary Brand Color',exact=True).fill('#5e2384')
  expect(page.locator('.vial-mockup')).to_have_css('--vial-primary','#5e2384')
  page.get_by_role('button',name='Reset mockup',exact=True).click()
- expect(page.locator('.vial-mockup__placeholder')).to_have_text('YOUR BRAND')
- expect(page.get_by_label('Primary Brand Color',exact=True)).to_have_value('#101849')
+ expect(page.locator('.reference-vial__logo')).to_have_count(0)
+ expect(page.get_by_label('Primary Brand Color',exact=True)).to_have_value('#003f6a')
  # Upload again, deselect branding, and assert the actual submitted payload has no hidden files.
  with page.expect_response(lambda r:r.url.endswith('/api/partner/upload') and r.request.method=='POST') as uploaded:
   page.get_by_label('Upload a logo',exact=True).set_input_files('client/public/brand/favicon-64.png')

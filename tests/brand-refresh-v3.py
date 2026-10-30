@@ -18,7 +18,7 @@ with sync_playwright() as p:
         page.wait_for_selector('#company')
         page.wait_for_function('document.querySelector(".hero-product-artwork").complete && document.querySelector(".hero-product-artwork").naturalWidth>0')
         page.evaluate('document.fonts.ready')
-        expect(page.locator('.hero-product-artwork')).to_have_attribute('src','/manus-storage/PremiumBlueResearchSkincareCollection_d54940d7.webp')
+        expect(page.locator('.hero-product-artwork')).to_have_attribute('src','/brand/peplogix-partner-hero.webp')
         expect(page.locator('.hero-copy h1')).to_have_css('color',BLUE)
         expect(page.locator('.hero-button')).to_have_css('background-color',ORANGE)
         expect(page.locator('.process-section')).to_have_css('background-color',BLUE)
