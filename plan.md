@@ -51,3 +51,7 @@ Use native-alpha image editing to remove the blue studio backdrop and floor from
 ## Replacement banner — October 29, 15:46
 
 Replace only the hero image binding with the supplied PremiumBlueResearchSkincareCollection.png, re-encoded without cropping at its original1672×941 dimensions. Keep the approved hero layout and all live-preview assets and behavior unchanged.
+
+## Catalog-interest replacement — October 30
+
+Replace the single shared catalog-interest constant with the user's exact 21 provided labels and remove every old label, including the former catch-all. Because inquiry UI search, selection, review, client/server validation, persisted payloads and dashboard rendering share the same `products` model, no backend schema or workflow changes are needed. Update the focused browser checks from any removed selection to a retained option and verify the complete replacement list is the only catalog list surfaced.

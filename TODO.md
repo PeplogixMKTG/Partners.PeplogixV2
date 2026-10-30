@@ -656,3 +656,9 @@ Verification: native-alpha PNG/WebP confirmed transparent exterior, original858�
 Replace the banner with the supplied PremiumBlueResearchSkincareCollection.png, preserving the full image and its original proportions. Keep current page styling and all live-preview assets and behavior unchanged.
 
 Verification: supplied replacement is1672×941, re-encoded158886-byte WebP, confirmed200 image/webp from managed storage. Hero URL updated; original width/height and object-fit contain preserved. Live-preview assets, dimensions, controls and styles unchanged.
+
+## [x] Catalog-interest option replacement — October 30
+
+Replace the existing catalog-interest choices, rather than adding to them, with exactly: Reta; Tirz; Sema; KLOW; GLOW; Tesamorelin; TESAMORELIN/IPAMORELIN; CJC-1295 no DAC/IPAMORELIN; BPC-157; TB500; WOLVERINE; GHK-Cu; KPV; Epithalon; NAD+; SEMAX; SELANK; MOTS-C; Capsules; Nasals; Serums. Do not retain old labels or add a catch-all option. Retain searchable multi-select behavior, selected chips, optional validation, persisted submission values, review summary, and dashboard display.
+
+Verification: exact ordered21-item shared catalog confirmed; focused browser check confirmed the picker shows only that list, CJC-1295 no DAC/IPAMORELIN and MOTS-C search/select as independent chips, and removed catch-all returns no match. TypeScript,17 server tests, production build and diff checks passed. The product picker remains optional and no inquiry was submitted during the focused check.

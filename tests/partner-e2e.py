@@ -116,7 +116,7 @@ with sync_playwright() as p:
     page.goto(BASE);page.wait_for_selector('#company')
     business(page,'PEPLOGIX_BROWSER_TEST_MOBILE')
     select_service(page,'Wholesale Supply')
-    page.locator('.partner-product-option',has_text='Other / Not Sure Yet').locator('input').check(force=True)
+    page.locator('.partner-product-option',has_text='Capsules').locator('input').check(force=True)
     radio(page,'purchaseMode','Not Sure Yet');radio(page,'initialSize','Just Exploring')
     page.get_by_role('button',name='Continue',exact=True).click()
     expect(page.locator('#partner-form-title')).to_have_text("You're One Step Closer.")

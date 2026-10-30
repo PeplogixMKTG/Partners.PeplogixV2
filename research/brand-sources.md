@@ -26,3 +26,7 @@ Native-alpha background removal preserved the reference vial/blank logo area and
 ## Latest supplied hero — October 29, 15:46
 
 PremiumBlueResearchSkincareCollection.png supplied by the owner replaces the previous hero only. Full1672×941 composition preserved in WebP at `/manus-storage/PremiumBlueResearchSkincareCollection_d54940d7.webp`. No generative editing, cropping, or live-preview changes.
+
+## Owner-provided partner catalog — October 30
+
+The catalog-interest picker is intentionally owner-managed and now uses only the 21 labels provided on October30: Reta, Tirz, Sema, KLOW, GLOW, Tesamorelin, TESAMORELIN/IPAMORELIN, CJC-1295 no DAC/IPAMORELIN, BPC-157, TB500, WOLVERINE, GHK-Cu, KPV, Epithalon, NAD+, SEMAX, SELANK, MOTS-C, Capsules, Nasals, Serums. This supersedes the earlier reference-derived list.
