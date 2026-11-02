@@ -2,18 +2,18 @@
 
 This is the complete editable source for the existing Peplogix Partner Landing Page. It preserves the current React/Vite visual system, responsive layouts, Peplogix brand assets, guided partnership inquiry, secure file handling, optional internal inquiry dashboard, and all form interactions.
 
-The public page is a Vite/React single-page application. The secure inquiry API and dashboard are Express routes backed by Drizzle and a MySQL-compatible database. The project includes an explicit `api/index.ts` Express function for Vercel and a Vercel-specific Vite build that produces the same frontend bundle into Vercel's `dist/` directory.
+The public page is a Vite/React single-page application. The secure inquiry API and dashboard are Express routes backed by Drizzle and a MySQL-compatible database. The project includes an explicit `api/index.js` Express function for Vercel and a Vercel-specific Vite build that produces the same frontend bundle into Vercel's `dist/` directory.
 
 ## What is included
 
 - The exact landing-page source, components, responsive styles, typography, colors, icons, animations, and supplied Peplogix images under `client/`.
 - The complete inquiry API, secure upload validation, private attachment retrieval, database schema, migrations, and tests under `server/`, `shared/`, and `drizzle/`.
-- A Vercel-compatible `api/index.ts`, root `app.ts`, `vercel.json`, `vite.vercel.config.ts`, `.env.example`, `pnpm-lock.yaml`, and Dockerfile.
+- A Vercel-compatible `api/index.js`, root `app.ts`, `vercel.json`, `vite.vercel.config.ts`, `.env.example`, `pnpm-lock.yaml`, and Dockerfile.
 - A protected `/dashboard` for reviewing submissions. On Vercel, set `ADMIN_EMAIL`, `ADMIN_PASSWORD`, and `SESSION_SECRET` to enable the portable password-login mode. Existing Manus OAuth is retained only when its Manus environment values are intentionally configured.
 
 ## Requirements
 
-- Node.js 22 or newer.
+- Node.js 22 (the deployment runtime is pinned to the 22.x major).
 - Corepack with pnpm 10.18.0. The project pins the package-manager version in `package.json`.
 - A MySQL-compatible database for inquiries and private uploaded files. Vercel does not provide MySQL automatically; create one through your preferred database provider and keep its connection string private.
 - A Vercel account and a GitHub repository for deployment.
@@ -81,7 +81,7 @@ pnpm build:vercel
 ## Deploy to Vercel
 
 1. In Vercel, choose **Add New → Project** and import the GitHub repository.
-2. Keep the existing Vite preset. The explicit `api/index.ts` function exports the same Express application for Vercel's Node.js runtime. The included `vercel.json` builds to `dist`, removes the generated static runtime-config script, routes `/api/*` to the function, and preserves `/dashboard` as the SPA route.
+2. Keep the existing Vite preset. The explicit `api/index.js` function exports the same Express application for Vercel's Node.js runtime. The included `vercel.json` builds to `dist`, removes the generated static runtime-config script, routes `/api/*` to the function, and preserves `/dashboard` as the SPA route.
 3. In **Project Settings → Environment Variables**, add these values for **Production**. Add the same values to **Preview** if you want review deployments to accept real test submissions:
    - `DATABASE_URL` — full MySQL-compatible connection string.
    - `SESSION_SECRET` — a unique high-entropy secret, at least 32 random bytes.
@@ -111,7 +111,9 @@ client/             React page, components, CSS, Peplogix imagery, and Vite entr
 server/             Express API, authentication, secure inquiry routes, and database access
 shared/             Shared inquiry schema and browser/server constants
 drizzle/            MySQL schema and migration history
-api/index.ts        Explicit Vercel Node Function for all existing Express API routes
+api/index.js        Vercel JavaScript Function with explicit bundle import
+server/vercelEntry.ts  Editable source entry bundled by build:vercel
+server/vercelRuntime.js Generated ESM server bundle (ignored, recreated on build)
 app.ts              Optional root Express export
 vercel.json         Vercel build and SPA routing configuration
 vite.vercel.config.ts  Vercel static output configuration

@@ -12,5 +12,10 @@
       "source": "/dashboard",
       "destination": "/index.html"
     }
-  ]
+  ],
+  "functions": {
+    "api/index.js": {
+      "includeFiles": "server/vercelRuntime.js"
+    }
+  }
 }

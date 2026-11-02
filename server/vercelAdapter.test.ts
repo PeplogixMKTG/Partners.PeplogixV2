@@ -21,8 +21,8 @@ vi.mock("./db", async importOriginal => ({
   getDb: database.getDb,
 }));
 
-// Exercise the deployed entry, not a duplicate app or isolated route handler.
-import adapter from "../api/index";
+// Exercise the exact editable source that build:vercel bundles for api/index.js.
+import adapter from "./vercelEntry";
 
 const config = JSON.parse(
   readFileSync(new URL("../vercel.json", import.meta.url), "utf8")
