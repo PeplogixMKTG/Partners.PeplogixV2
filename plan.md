@@ -83,3 +83,7 @@ The final ZIP will exclude generated build output, dependencies, `.git`, local e
 ## Export completion — November 1
 
 The final export is self-contained for GitHub and Vercel: its approved hero, logo, live transparent vial, and live capsule-bottle source assets are served from `client/public/brand/`, not Manus storage. The project retains the unchanged landing experience while the deployment layer adds a root Express export, Vercel static output, optional password mode for the internal dashboard, and S3-compatible direct browser uploads for the existing full-size private attachment workflow.
+
+## Vercel deployment recovery — November 1
+
+Vercel’s deployment log confirms the configured `pnpm run build:vercel` command succeeds but writes the unchanged Vite build to root `public/`; Vercel was still searching for its Vite default `dist/`. Add the explicit `outputDirectory: "public"` field to `vercel.json`. This is a deployment configuration repair only; it does not alter application source, design, assets, responsive layout, or interaction behavior.

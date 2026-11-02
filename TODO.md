@@ -682,3 +682,7 @@ Export the current Peplogix Partner Landing Page as one downloadable, editable s
 - Preserve the existing React/Vite landing page, visual assets, responsive behavior, inquiry flow, dashboard, database schema, and server routes as editable source rather than a static screenshot.
 - Add Vercel Express entrypoint, Vercel static build configuration, secret-free environment template, portable local assets, password-protected dashboard mode, and private S3-compatible direct-upload path that retains the existing 5 MB-per-file capability on Vercel.
 - Verify TypeScript, backend tests, original Node build, Vercel static build, root serverless-style smoke routes, desktop/mobile visual regressions, live preview, and catalog interactions before packaging a secret-free ZIP.
+
+## [ ] Vercel static-output recovery
+- Fix the concrete Vercel `STATIC_BUILD_NO_OUT_DIR` failure by declaring the existing `public/` output produced by `pnpm run build:vercel`, without changing the landing-page implementation or design.
+- Verify the clean Vercel build produces `public/index.html`, then sync a normal new commit to the managed source and `PeplogixMKTG/Partners.PeplogixV2` so Vercel receives the configuration update.
