@@ -86,4 +86,4 @@ The final export is self-contained for GitHub and Vercel: its approved hero, log
 
 ## Vercel deployment recovery — November 1
 
-Vercel’s deployment log confirms the configured `pnpm run build:vercel` command succeeds but writes the unchanged Vite build to root `public/`; Vercel was still searching for its Vite default `dist/`. Add the explicit `outputDirectory: "public"` field to `vercel.json`. This is a deployment configuration repair only; it does not alter application source, design, assets, responsive layout, or interaction behavior.
+Vercel’s deployment log confirms the configured `pnpm run build:vercel` command succeeds but its connected project still requires Vite’s conventional root `dist/` directory. Configure both `vite.vercel.config.ts` and `vercel.json` to generate and declare `dist/` explicitly. This is a deployment configuration repair only; it does not alter application source, design, assets, responsive layout, or interaction behavior.

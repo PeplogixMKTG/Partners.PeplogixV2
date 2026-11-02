@@ -684,5 +684,6 @@ Export the current Peplogix Partner Landing Page as one downloadable, editable s
 - Verify TypeScript, backend tests, original Node build, Vercel static build, root serverless-style smoke routes, desktop/mobile visual regressions, live preview, and catalog interactions before packaging a secret-free ZIP.
 
 ## [ ] Vercel static-output recovery
-- Fix the concrete Vercel `STATIC_BUILD_NO_OUT_DIR` failure by declaring the existing `public/` output produced by `pnpm run build:vercel`, without changing the landing-page implementation or design.
-- Verify the clean Vercel build produces `public/index.html`, then sync a normal new commit to the managed source and `PeplogixMKTG/Partners.PeplogixV2` so Vercel receives the configuration update.
+
+- Fix the concrete Vercel `STATIC_BUILD_NO_OUT_DIR` failure by making `pnpm run build:vercel` generate root `dist/` and declaring that same directory in `vercel.json`, without changing the landing-page implementation or design.
+- Verify the clean Vercel build produces `dist/index.html`, then sync a normal new commit to the managed source and `PeplogixMKTG/Partners.PeplogixV2` so Vercel receives the configuration update.
