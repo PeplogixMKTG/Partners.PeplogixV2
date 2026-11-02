@@ -2,7 +2,7 @@
 
 This is the complete editable source for the existing Peplogix Partner Landing Page. It preserves the current React/Vite visual system, responsive layouts, Peplogix brand assets, guided partnership inquiry, secure file handling, optional internal inquiry dashboard, and all form interactions.
 
-The public page is a Vite/React single-page application. The secure inquiry API and dashboard are Express routes backed by Drizzle and a MySQL-compatible database. The project includes a root Express export for Vercel and a Vercel-specific Vite build that produces the same frontend bundle into Vercel's `public/` directory.
+The public page is a Vite/React single-page application. The secure inquiry API and dashboard are Express routes backed by Drizzle and a MySQL-compatible database. The project includes a root Express export for Vercel and a Vercel-specific Vite build that produces the same frontend bundle into Vercel's `dist/` directory.
 
 ## What is included
 
@@ -60,7 +60,7 @@ pnpm build
 pnpm build:vercel
 ```
 
-`pnpm build` verifies the existing Node/Express production build. `pnpm build:vercel` writes the Vercel CDN assets to a generated root `public/` directory; it is intentionally ignored by Git. The visual frontend source is the same Vite application in both builds.
+`pnpm build` verifies the existing Node/Express production build. `pnpm build:vercel` writes the Vercel CDN assets to a generated root `dist/` directory; it is intentionally ignored by Git. The visual frontend source is the same Vite application in both builds.
 
 ## GitHub setup
 
@@ -120,3 +120,35 @@ vite.vercel.config.ts  Vercel static output configuration
 ## Existing deployment alternatives
 
 The included `Dockerfile` remains available for other Node container hosts. For Vercel, use the supplied `app.ts`, `vercel.json`, and `build:vercel` command rather than the Dockerfile.
+
+## Full-entry team notification emails (Resend)
+
+The landing-page design is unchanged. When all email settings below are valid, every **newly saved** inquiry atomically queues one email containing all submitted answers, the accuracy confirmation, submission ID/time, and uploaded-file metadata. The applicant's email is `Reply-To`; the sender is your verified address. Files remain private in the authenticated `/dashboard`; notification emails do not publish file capabilities or attach private files.
+
+### Activation
+
+1. In your Resend account, add a domain or sending subdomain you own under **Domains** and publish the exact DNS verification records Resend supplies. Do not replace existing mailbox MX records. Wait until Resend marks the sending domain verified.
+2. Create a sending API key restricted to that domain where available. Save it directly in Vercel; do not commit or paste it in source, messages, screenshots, or client-prefixed variables.
+3. Apply the checked-in **additive** migration `0003_partner_notifications` against the **same** MySQL database configured for the live Vercel API, using the existing `pnpm db:migrate` command. Run migrations as a one-time trusted operation, not during the static frontend build. This migration creates only the notification table; it does not delete inquiries or files.
+4. Add these **server-side** Vercel Production environment values:
+   - `RESEND_API_KEY`: your Resend sending key.
+   - `PARTNER_NOTIFICATION_FROM`: a verified sender such as `Peplogix Partners <notifications@YOUR-VERIFIED-DOMAIN>`.
+   - `PARTNER_NOTIFICATION_TO`: the approved team mailbox(es), separated by commas or semicolons, up to 50 unique recipients. Everyone in this list receives the entire entry, so use only authorized internal recipients.
+   - `APP_BASE_URL`: your actual live website origin, such as `https://YOUR-PRODUCTION-DOMAIN`. The dashboard link goes to this website and still requires administrator sign-in.
+5. Redeploy the latest GitHub commit after saving environment values. Do not enable real team emails in untrusted Preview deployments. Incomplete/invalid email settings disable new email enqueueing; earlier inquiries are not bulk-emailed automatically.
+6. Submit a clearly labelled test entry, verify the saved inquiry, inspect the accepted email in Resend, and confirm receipt in the intended mailbox. An API acceptance is **not** proof of inbox delivery; check Resend's delivery/bounce details and your mailbox.
+
+### Failure and duplicate protection
+
+The notification row is saved in the same transaction as its inquiry. The first send is bounded and awaited before the HTTP request ends, making it compatible with Vercel Functions; it is not an unreliable detached background promise. The original success response remains successful when sending fails. The saved immutable email payload, unique inquiry ID, leased send claim, and Resend idempotency key prevent repeated form requests from creating new alerts. A row marked `sent` means the provider accepted the message, not that the recipient opened or received it.
+
+Authenticated administrator-only endpoints provide delivery state and controlled retry:
+
+- `GET /api/partner/inquiries/:id/notification`
+- `POST /api/partner/inquiries/:id/notification/retry`
+- `POST /api/partner/notifications/process` (administrator-only bounded outbox drain)
+- `GET /api/partner/notifications/process` (scheduler-only; requires exact `Authorization: Bearer <CRON_SECRET>` and a configured random token of at least 32 characters)
+
+Use the existing authenticated administrator session; these are not public resend links. A retry never resends a row already marked `sent`. A pending/failed alert can also be retried by an idempotent repeat of its original submission request after its backoff delay. **No periodic scheduler is installed or claimed**: if there are no later requests or administrator actions, a failed alert remains stored for follow-up. A bounded worker is implemented and processes at most two due alerts per call. Connect its protected GET endpoint to your deployment's native scheduler and configure `CRON_SECRET` to enable recurring retries; select a cadence supported by your Vercel plan. No scheduler or paid service is automatically provisioned.
+
+A definite sender/key/configuration rejection requires administrator review. After correcting it, the administrator retry endpoint can retry within the original safe window using the unchanged payload and key. Eight attempts or the 23-hour safe retry boundary blocks automatic re-sending rather than risking duplicate mail after Resend's 24-hour idempotency-key retention expires. Verify the provider's records before any deliberate manual re-send. Do not delete durable notification state to force retries. This integration never forwards historical inquiries or messages to an unconfirmed address.

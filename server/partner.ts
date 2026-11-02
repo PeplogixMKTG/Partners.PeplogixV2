@@ -6,6 +6,7 @@ import {
   partnerAdminInvites,
   partnerAssets,
   partnerInquiries,
+  partnerNotifications,
   type PartnerAsset,
   type PartnerInquiry,
   users,
@@ -15,6 +16,14 @@ import {
   type PartnerSubmission,
 } from "../shared/partner";
 import { getDb } from "./db";
+import {
+  buildNotificationRecord,
+  deliverNotification,
+  notificationWorkerAuthorized,
+  processDueNotifications,
+  readNotificationStatus,
+  tryDeliverNotification,
+} from "./partnerNotifications";
 import {
   createDirectUpload,
   createPrivateDownloadUrl,
@@ -455,6 +464,20 @@ async function createInquiry(submission: PartnerSubmission) {
       }
     }
 
+    const notification = buildNotificationRecord({
+      id: inquiryId,
+      submittedAt,
+      data: submission.data,
+      assets: assets.map(asset => ({
+        name: asset.name,
+        type: asset.type,
+        size: asset.size,
+        role: asset.id === submission.logoId ? "logo" : "asset",
+      })),
+    });
+    if (notification)
+      await tx.insert(partnerNotifications).values(notification);
+
     return { id: inquiryId, submittedAt };
   });
 }
@@ -731,12 +754,14 @@ export function registerPartnerRoutes(app: Express): void {
         // Idempotent repeats expose no saved form data, only this opaque id and time.
         const prior = await findSubmissionByRequestId(requestId);
         if (prior) {
+          await tryDeliverNotification(prior.id);
           res.status(200).json(submissionResponse(prior));
           return;
         }
 
         const submission = partnerSubmissionSchema.parse(req.body);
         const created = await createInquiry(submission);
+        await tryDeliverNotification(created.id);
         res.status(201).json(submissionResponse(created));
       } catch (error) {
         // A concurrent request can race immediately after the preliminary lookup.
@@ -744,6 +769,7 @@ export function registerPartnerRoutes(app: Express): void {
           try {
             const prior = await findSubmissionByRequestId(requestId);
             if (prior) {
+              await tryDeliverNotification(prior.id);
               res.status(200).json(submissionResponse(prior));
               return;
             }
@@ -764,6 +790,98 @@ export function registerPartnerRoutes(app: Express): void {
         }
         console.error("[Partner] Submission failed", error);
         jsonError(res, 500, "Unable to submit the inquiry");
+      }
+    }
+  );
+
+  app.get(
+    "/api/partner/notifications/process",
+    partnerNoStoreMiddleware,
+    async (req, res) => {
+      if (!notificationWorkerAuthorized(req.headers.authorization)) {
+        jsonError(res, 401, "Authorized scheduler credentials required");
+        return;
+      }
+      try {
+        res.json(await processDueNotifications());
+      } catch {
+        jsonError(
+          res,
+          503,
+          "Notification processing is temporarily unavailable"
+        );
+      }
+    }
+  );
+
+  app.post(
+    "/api/partner/notifications/process",
+    partnerNoStoreMiddleware,
+    rateLimit("partner-email-process", 6, 10 * 60 * 1000),
+    async (req, res) => {
+      if (!(await getAdmin(req, res))) return;
+      try {
+        res.json(await processDueNotifications());
+      } catch {
+        jsonError(
+          res,
+          503,
+          "Notification processing is temporarily unavailable"
+        );
+      }
+    }
+  );
+
+  app.get(
+    "/api/partner/inquiries/:id/notification",
+    partnerNoStoreMiddleware,
+    async (req, res) => {
+      if (!(await getAdmin(req, res))) return;
+      if (!/^[0-9a-f-]{36}$/i.test(req.params.id)) {
+        jsonError(res, 404, "Notification not found");
+        return;
+      }
+      try {
+        const status = await readNotificationStatus(req.params.id);
+        if (!status) {
+          jsonError(
+            res,
+            404,
+            "No email notification was queued for this inquiry"
+          );
+          return;
+        }
+        res.json(status);
+      } catch {
+        jsonError(res, 503, "Notification status is temporarily unavailable");
+      }
+    }
+  );
+
+  app.post(
+    "/api/partner/inquiries/:id/notification/retry",
+    partnerNoStoreMiddleware,
+    rateLimit("partner-email-retry", 6, 10 * 60 * 1000),
+    async (req, res) => {
+      if (!(await getAdmin(req, res))) return;
+      if (!/^[0-9a-f-]{36}$/i.test(req.params.id)) {
+        jsonError(res, 404, "Notification not found");
+        return;
+      }
+      try {
+        const previous = await readNotificationStatus(req.params.id);
+        if (!previous) {
+          jsonError(
+            res,
+            404,
+            "No email notification was queued for this inquiry"
+          );
+          return;
+        }
+        await deliverNotification(req.params.id, true);
+        res.json(await readNotificationStatus(req.params.id));
+      } catch {
+        jsonError(res, 503, "Unable to retry this notification");
       }
     }
   );

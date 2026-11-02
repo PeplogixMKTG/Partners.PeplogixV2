@@ -93,3 +93,38 @@ export type PartnerInquiry = typeof partnerInquiries.$inferSelect;
 export type InsertPartnerInquiry = typeof partnerInquiries.$inferInsert;
 export type PartnerAsset = typeof partnerAssets.$inferSelect;
 export type InsertPartnerAsset = typeof partnerAssets.$inferInsert;
+
+/** Immutable email payload plus durable delivery state; one team alert per inquiry. */
+export const partnerNotifications = mysqlTable(
+  "partner_notifications",
+  {
+    inquiryId: varchar("inquiryId", { length: 64 }).primaryKey(),
+    payload: longtext("payload").notNull(),
+    status: mysqlEnum("status", [
+      "pending",
+      "sending",
+      "sent",
+      "failed",
+      "needs_review",
+    ])
+      .default("pending")
+      .notNull(),
+    attempts: int("attempts").default(0).notNull(),
+    claimToken: varchar("claimToken", { length: 36 }),
+    leaseUntil: timestamp("leaseUntil"),
+    nextAttemptAt: timestamp("nextAttemptAt").defaultNow().notNull(),
+    firstAttemptAt: timestamp("firstAttemptAt"),
+    providerId: varchar("providerId", { length: 128 }),
+    lastError: varchar("lastError", { length: 200 }),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    sentAt: timestamp("sentAt"),
+  },
+  table => [
+    index("partner_notifications_retry_idx").on(
+      table.status,
+      table.nextAttemptAt
+    ),
+  ]
+);
+
+export type PartnerNotification = typeof partnerNotifications.$inferSelect;
