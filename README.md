@@ -2,13 +2,13 @@
 
 This is the complete editable source for the existing Peplogix Partner Landing Page. It preserves the current React/Vite visual system, responsive layouts, Peplogix brand assets, guided partnership inquiry, secure file handling, optional internal inquiry dashboard, and all form interactions.
 
-The public page is a Vite/React single-page application. The secure inquiry API and dashboard are Express routes backed by Drizzle and a MySQL-compatible database. The project includes a root Express export for Vercel and a Vercel-specific Vite build that produces the same frontend bundle into Vercel's `dist/` directory.
+The public page is a Vite/React single-page application. The secure inquiry API and dashboard are Express routes backed by Drizzle and a MySQL-compatible database. The project includes an explicit `api/index.ts` Express function for Vercel and a Vercel-specific Vite build that produces the same frontend bundle into Vercel's `dist/` directory.
 
 ## What is included
 
 - The exact landing-page source, components, responsive styles, typography, colors, icons, animations, and supplied Peplogix images under `client/`.
 - The complete inquiry API, secure upload validation, private attachment retrieval, database schema, migrations, and tests under `server/`, `shared/`, and `drizzle/`.
-- A Vercel-compatible root `app.ts`, `vercel.json`, `vite.vercel.config.ts`, `.env.example`, `pnpm-lock.yaml`, and Dockerfile.
+- A Vercel-compatible `api/index.ts`, root `app.ts`, `vercel.json`, `vite.vercel.config.ts`, `.env.example`, `pnpm-lock.yaml`, and Dockerfile.
 - A protected `/dashboard` for reviewing submissions. On Vercel, set `ADMIN_EMAIL`, `ADMIN_PASSWORD`, and `SESSION_SECRET` to enable the portable password-login mode. Existing Manus OAuth is retained only when its Manus environment values are intentionally configured.
 
 ## Requirements
@@ -81,7 +81,7 @@ pnpm build:vercel
 ## Deploy to Vercel
 
 1. In Vercel, choose **Add New → Project** and import the GitHub repository.
-2. Leave the framework detection enabled. The root `app.ts` exports the Express application for Vercel's Node.js runtime. The included `vercel.json` uses `pnpm run build:vercel` and configures the SPA dashboard route.
+2. Keep the existing Vite preset. The explicit `api/index.ts` function exports the same Express application for Vercel's Node.js runtime. The included `vercel.json` builds to `dist`, removes the generated static runtime-config script, routes `/api/*` to the function, and preserves `/dashboard` as the SPA route.
 3. In **Project Settings → Environment Variables**, add these values for **Production**. Add the same values to **Preview** if you want review deployments to accept real test submissions:
    - `DATABASE_URL` — full MySQL-compatible connection string.
    - `SESSION_SECRET` — a unique high-entropy secret, at least 32 random bytes.
@@ -111,7 +111,8 @@ client/             React page, components, CSS, Peplogix imagery, and Vite entr
 server/             Express API, authentication, secure inquiry routes, and database access
 shared/             Shared inquiry schema and browser/server constants
 drizzle/            MySQL schema and migration history
-app.ts              Root Vercel Express export
+api/index.ts        Explicit Vercel Node Function for all existing Express API routes
+app.ts              Optional root Express export
 vercel.json         Vercel build and SPA routing configuration
 vite.vercel.config.ts  Vercel static output configuration
 .env.example        Secret-free variable names and placeholders
@@ -127,8 +128,8 @@ The landing-page design is unchanged. When all email settings below are valid, e
 
 ### Activation
 
-1. In your Resend account, add a domain or sending subdomain you own under **Domains** and publish the exact DNS verification records Resend supplies. Do not replace existing mailbox MX records. Wait until Resend marks the sending domain verified.
-2. Create a sending API key restricted to that domain where available. Save it directly in Vercel; do not commit or paste it in source, messages, screenshots, or client-prefixed variables.
+1. For the currently approved single-recipient test, use `Peplogix Partners <onboarding@resend.dev>` and send only to `gpernudi@peplogix.com`, the email associated with this Resend account. No domain or DNS changes are required. Resend's default sender is testing-only and cannot send to other recipients. Verify an owned sender domain separately before expanding recipients or using branded production mail.
+2. Create a **Sending access** API key; restrict it to the verified sending domain when one is later configured. Save it directly in Vercel; do not commit or paste it in source, messages, screenshots, or client-prefixed variables.
 3. Apply the checked-in **additive** migration `0003_partner_notifications` against the **same** MySQL database configured for the live Vercel API, using the existing `pnpm db:migrate` command. Run migrations as a one-time trusted operation, not during the static frontend build. This migration creates only the notification table; it does not delete inquiries or files.
 4. Add these **server-side** Vercel Production environment values:
    - `RESEND_API_KEY`: your Resend sending key.
