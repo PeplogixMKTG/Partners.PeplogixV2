@@ -101,3 +101,11 @@ User authorized recipient gpernudi@peplogix.com and live origin https://partners
 ## Live Vercel ESM packaging recovery — November 2
 
 Runtime logs show an extensionless `server/app` import after the API TypeScript entry was individually transpiled. Preserve the existing Express application and every frontend file, but generate an ESM backend bundle using esbuild during build:vercel. The committed JavaScript API entry imports that generated bundle through its explicit `.js` extension; include the bundle in Vercel function artifacts, ignore it in source control, and pin Node 22. Runtime secrets remain environment-only. Validate the generated entry with real Node and the deployed cold-start health/API routes before the authorized full-entry email test.
+
+## Live notification activation verified — November 2
+
+The existing Vercel application now saves inquiries to the managed MySQL database and sends full-entry Resend email to the approved sole recipient. Runtime module packaging, migration and all required Production secret settings are complete. Native Node22 cold-start health, complete answer/file persistence, owner authentication, private downloads, immutable single-send delivery and idempotent request repeats were exercised end-to-end. Resend reports Delivered for the clearly labeled live test. Keep default sender restricted to the account email; no domain or DNS connection and no periodic retry scheduler were configured. The application source was synced to V2; this final evidence-only update is saved in the managed repository without triggering a redundant Vercel deployment.
+
+## Single-owner dashboard access — November 2, 12:53
+
+Only the configured gpernudi@peplogix.com password-mode owner may authenticate to the external dashboard and its protected APIs. Match signed sessions to the canonical password-owner OpenID, current configured email, password login method and admin role; leave Manus-mode behavior unchanged. Update the user-supplied password only in Vercel secret storage and rotate the session signing key so previously issued sessions are invalid. Preserve every client file, submission route and email setting. Never put the password in Git or this plan.

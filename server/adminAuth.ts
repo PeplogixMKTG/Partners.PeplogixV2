@@ -5,6 +5,7 @@ import { upsertUser } from "./db";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { ENV } from "./_core/env";
 import { sdk } from "./_core/sdk";
+import { passwordAdminOpenId } from "./_core/passwordIdentity";
 import { COOKIE_NAME, ONE_YEAR_MS } from "../shared/const";
 
 const loginSchema = z
@@ -57,13 +58,6 @@ function safeEqual(left: string, right: string): boolean {
   return timingSafeEqual(leftHash, rightHash);
 }
 
-function adminOpenId(email: string): string {
-  return `password_admin_${createHash("sha256")
-    .update(email)
-    .digest("hex")
-    .slice(0, 40)}`;
-}
-
 /**
  * Adds an owner-controlled login for external deployments. It is enabled only
  * when ADMIN_EMAIL, ADMIN_PASSWORD, and SESSION_SECRET are supplied. In Manus
@@ -96,7 +90,7 @@ export function registerAdminPasswordRoutes(app: Express): void {
         return;
       }
 
-      const openId = adminOpenId(normalizedEmail);
+      const openId = passwordAdminOpenId(normalizedEmail);
       await upsertUser({
         openId,
         name: "Peplogix Administrator",
