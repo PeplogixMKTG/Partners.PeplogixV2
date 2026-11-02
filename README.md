@@ -1,14 +1,122 @@
-# Peplogix Partner Portal
+# Peplogix Partner Landing Page
 
-React / Express / tRPC / Drizzle starter, adapted from the Sandbox web-db-user template.
+This is the complete editable source for the existing Peplogix Partner Landing Page. It preserves the current React/Vite visual system, responsive layouts, Peplogix brand assets, guided partnership inquiry, secure file handling, optional internal inquiry dashboard, and all form interactions.
 
-- `pnpm dev`: development server; honors `PORT` (default 3000).
-- `pnpm build` / `pnpm start`: build and serve `dist/index.js` and `dist/public/`.
-- `pnpm db:migrate`: apply checked-in migrations. `pnpm db:push`: generate and apply new schema changes.
-- `pnpm check` / `pnpm test`: types and application tests.
+The public page is a Vite/React single-page application. The secure inquiry API and dashboard are Express routes backed by Drizzle and a MySQL-compatible database. The project includes a root Express export for Vercel and a Vercel-specific Vite build that produces the same frontend bundle into Vercel's `public/` directory.
 
-Start with the Webdev skill's default-template guide. Platform login, storage, payments and service contracts live in its shared references; read the relevant capability before extending its helper.
+## What is included
 
-`server/_core/publicConfig.ts` exposes only named public runtime values. Private keys stay server-side. The platform serves managed `/manus-storage/` assets; the application does not register a second proxy.
+- The exact landing-page source, components, responsive styles, typography, colors, icons, animations, and supplied Peplogix images under `client/`.
+- The complete inquiry API, secure upload validation, private attachment retrieval, database schema, migrations, and tests under `server/`, `shared/`, and `drizzle/`.
+- A Vercel-compatible root `app.ts`, `vercel.json`, `vite.vercel.config.ts`, `.env.example`, `pnpm-lock.yaml`, and Dockerfile.
+- A protected `/dashboard` for reviewing submissions. On Vercel, set `ADMIN_EMAIL`, `ADMIN_PASSWORD`, and `SESSION_SECRET` to enable the portable password-login mode. Existing Manus OAuth is retained only when its Manus environment values are intentionally configured.
 
-Platform configuration is readable and editable through `webdev.config`. Default settings are initial values, not enforced constraints. The agent may modify the files, commands and configuration or follow the flexible guide for another stack.
+## Requirements
+
+- Node.js 22 or newer.
+- Corepack with pnpm 10.18.0. The project pins the package-manager version in `package.json`.
+- A MySQL-compatible database for inquiries and private uploaded files. Vercel does not provide MySQL automatically; create one through your preferred database provider and keep its connection string private.
+- A Vercel account and a GitHub repository for deployment.
+
+## Local setup
+
+1. Extract the ZIP and open the project folder.
+2. Copy the secret-free template and add your own values:
+
+   ```bash
+   cp .env.example .env.local
+   ```
+
+3. Edit `.env.local`. At minimum, add `DATABASE_URL`, `SESSION_SECRET`, `ADMIN_EMAIL`, and `ADMIN_PASSWORD`. Do not commit `.env.local`.
+4. Enable the pinned package manager and install dependencies:
+
+   ```bash
+   corepack enable
+   pnpm install --frozen-lockfile
+   ```
+
+5. Apply the checked-in database migrations once against your database:
+
+   ```bash
+   DATABASE_URL='your-mysql-connection-url' pnpm db:migrate
+   ```
+
+6. Run the full local application:
+
+   ```bash
+   pnpm dev
+   ```
+
+   Open `http://localhost:3000`. The public page is available at `/` and the internal submission dashboard is at `/dashboard`.
+
+## Verification commands
+
+Run these before committing or deploying:
+
+```bash
+pnpm check
+pnpm test
+pnpm build
+pnpm build:vercel
+```
+
+`pnpm build` verifies the existing Node/Express production build. `pnpm build:vercel` writes the Vercel CDN assets to a generated root `public/` directory; it is intentionally ignored by Git. The visual frontend source is the same Vite application in both builds.
+
+## GitHub setup
+
+1. Create an empty GitHub repository.
+2. From this project directory, initialize and push your repository if needed:
+
+   ```bash
+   git init
+   git add .
+   git commit -m "Initial Peplogix partner landing page export"
+   git branch -M main
+   git remote add origin https://github.com/YOUR-ACCOUNT/YOUR-REPOSITORY.git
+   git push -u origin main
+   ```
+
+3. Confirm `.env`, `.env.local`, `node_modules`, `dist`, and generated root `public/` are not included in the GitHub commit. `.env.example` is safe to commit because it contains names and placeholders only.
+
+## Deploy to Vercel
+
+1. In Vercel, choose **Add New → Project** and import the GitHub repository.
+2. Leave the framework detection enabled. The root `app.ts` exports the Express application for Vercel's Node.js runtime. The included `vercel.json` uses `pnpm run build:vercel` and configures the SPA dashboard route.
+3. In **Project Settings → Environment Variables**, add these values for **Production**. Add the same values to **Preview** if you want review deployments to accept real test submissions:
+   - `DATABASE_URL` — full MySQL-compatible connection string.
+   - `SESSION_SECRET` — a unique high-entropy secret, at least 32 random bytes.
+
+- `ADMIN_EMAIL` — the owner email allowed to sign in at `/dashboard`.
+- `ADMIN_PASSWORD` — a long unique password for that dashboard.
+
+  To preserve the existing 5 MB-per-file and 25 MB-total branding-asset limits on Vercel, also configure a **private S3-compatible bucket** and set `S3_BUCKET`, `S3_REGION`, `S3_ACCESS_KEY_ID`, and `S3_SECRET_ACCESS_KEY`. Enable bucket-default encryption. The application gives the browser a short-lived signed PUT URL, then keeps only the private object key in the database. Add the production domain and any preview domains you plan to test to the bucket's CORS `AllowedOrigins`, allowing `PUT` and `Content-Type` from those origins. For Cloudflare R2, MinIO, or another compatible service, set `S3_ENDPOINT` and, if required, `S3_FORCE_PATH_STYLE=true`.
+
+  Mark `DATABASE_URL`, `SESSION_SECRET`, and `ADMIN_PASSWORD` as secrets. Never prefix any of these server values with `VITE_`.
+
+4. Deploy. Vercel runs `pnpm install --frozen-lockfile` and `pnpm run build:vercel`, serves generated static files from its CDN, and runs the Express API/dashboard backend as a Node.js function.
+5. Open the deployment URL. Verify `/`, submit a test inquiry, sign into `/dashboard`, review the test submission, and then remove the test record from the dashboard/database if you do not want it retained.
+
+### Optional Manus OAuth mode
+
+The original Manus OAuth path is still in the source for use only when you deliberately configure its project values. If you choose it, supply the `MANUS_*` variables listed as comments in `.env.example` and omit the portable password variables. For a normal GitHub/Vercel deployment, use the password mode described above.
+
+## Security and data handling
+
+The public inquiry endpoints validate request shapes and uploaded bytes, limit file count and size, apply no-store headers, and keep uploaded files private until an authenticated administrator downloads them. Without S3 settings, local and Manus deployments retain the original database-backed fallback. On Vercel, configure the private direct-upload bucket described above for attachments larger than the Function request limit. The dashboard is excluded from search indexing. Do not expose database, session, or object-storage values in browser code, GitHub, Vercel client variables, or screenshots.
+
+## Project structure
+
+```text
+client/             React page, components, CSS, Peplogix imagery, and Vite entry
+server/             Express API, authentication, secure inquiry routes, and database access
+shared/             Shared inquiry schema and browser/server constants
+drizzle/            MySQL schema and migration history
+app.ts              Root Vercel Express export
+vercel.json         Vercel build and SPA routing configuration
+vite.vercel.config.ts  Vercel static output configuration
+.env.example        Secret-free variable names and placeholders
+```
+
+## Existing deployment alternatives
+
+The included `Dockerfile` remains available for other Node container hosts. For Vercel, use the supplied `app.ts`, `vercel.json`, and `build:vercel` command rather than the Dockerfile.

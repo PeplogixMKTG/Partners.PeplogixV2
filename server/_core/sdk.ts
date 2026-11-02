@@ -1,5 +1,10 @@
-import { AXIOS_TIMEOUT_MS, COOKIE_NAME, ONE_YEAR_MS, decodeOAuthState } from "@shared/const";
-import { ForbiddenError } from "@shared/_core/errors";
+import {
+  AXIOS_TIMEOUT_MS,
+  COOKIE_NAME,
+  ONE_YEAR_MS,
+  decodeOAuthState,
+} from "../../shared/const";
+import { ForbiddenError } from "../../shared/_core/errors";
 import axios, { type AxiosInstance } from "axios";
 import { parse as parseCookieHeader } from "cookie";
 import type { Request } from "express";
@@ -214,7 +219,8 @@ class SDKServer {
 
       if (
         !isNonEmptyString(openId) ||
-        (!isNonEmptyString(appId) || appId !== ENV.appId) ||
+        !isNonEmptyString(appId) ||
+        appId !== ENV.appId ||
         typeof name !== "string"
       ) {
         console.warn("[Auth] Session payload missing required fields");
@@ -263,7 +269,8 @@ class SDKServer {
     if (!sessionToken && req.path.startsWith("/api/scheduled/")) {
       const ticket = cookies.get("app_session_id");
       const identity = await this.verifySession(ticket);
-      if (identity?.openId.startsWith(CRON_OPEN_ID_PREFIX)) sessionToken = ticket;
+      if (identity?.openId.startsWith(CRON_OPEN_ID_PREFIX))
+        sessionToken = ticket;
     }
 
     // 2. Fallback to the Authorization header (Preview auto-login via
@@ -294,6 +301,12 @@ class SDKServer {
     const sessionUserId = session.openId;
     const signedInAt = new Date();
     let user = await db.getUserByOpenId(sessionUserId);
+
+    // Password-mode users are created by the owner-only login route. They are
+    // intentionally never synchronized against the Manus OAuth service.
+    if (ENV.authMode === "password" && !user) {
+      throw ForbiddenError("User not found");
+    }
 
     // If user not in DB, sync from OAuth server automatically
     if (!user) {

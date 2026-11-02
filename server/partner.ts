@@ -15,6 +15,15 @@ import {
   type PartnerSubmission,
 } from "../shared/partner";
 import { getDb } from "./db";
+import {
+  createDirectUpload,
+  createPrivateDownloadUrl,
+  deletePrivateObject,
+  inspectPrivateObject,
+  objectStorageKey,
+  objectStoragePointer,
+  privateObjectStorageEnabled,
+} from "./privateObjectStorage";
 import { sdk } from "./_core/sdk";
 
 const MAX_FILE_BYTES = 5 * 1024 * 1024;
@@ -215,6 +224,14 @@ const uploadSchema = z
   })
   .strict();
 
+const directUploadSchema = z
+  .object({
+    name: z.string().min(1).max(512),
+    type: z.string().min(1).max(128),
+    size: z.number().int().positive().max(MAX_FILE_BYTES),
+  })
+  .strict();
+
 const adminActivationSchema = z.object({ code: z.string() }).strict();
 
 /** A canonical unpadded 32-byte base64url value, used as an opaque capability. */
@@ -246,6 +263,29 @@ export function validateUploadPayload(input: unknown): {
     throw new Error("File type does not match its contents");
   }
   return { name: cleanFileName(payload.name), detected: { type, bytes } };
+}
+
+function validateDirectUploadPayload(input: unknown) {
+  const payload = directUploadSchema.parse(input);
+  const type =
+    payload.type.toLowerCase() === "image/jpg"
+      ? "image/jpeg"
+      : payload.type.toLowerCase();
+  if (!MIME_TYPES.has(type)) throw new Error("Unsupported file format");
+  return { name: cleanFileName(payload.name), type, size: payload.size };
+}
+
+async function validatePrivateObjectAsset(asset: PartnerAsset): Promise<void> {
+  const key = objectStorageKey(asset.dataBase64);
+  if (!key) return;
+  const object = await inspectPrivateObject(key);
+  if (object.size !== asset.size || object.type !== asset.type) {
+    throw new Error("Uploaded file metadata does not match the selected file");
+  }
+  const detected = detectFile(object.prefix);
+  if (!detected || detected !== asset.type || !MIME_TYPES.has(detected)) {
+    throw new Error("File type does not match its contents");
+  }
 }
 
 function publicAsset(
@@ -376,6 +416,7 @@ async function createInquiry(submission: PartnerSubmission) {
       ) {
         throw new Error("Attached files exceed the allowed total size");
       }
+      for (const asset of assets) await validatePrivateObjectAsset(asset);
       if (submission.logoId) {
         const logo = assets.find(asset => asset.id === submission.logoId);
         if (!logo || !LOGO_MIME_TYPES.has(logo.type)) {
@@ -432,6 +473,60 @@ function contentDisposition(name: string): string {
 export function registerPartnerRoutes(app: Express): void {
   // Public endpoints are rate limited by the direct socket address only.
   app.post(
+    "/api/partner/upload-url",
+    partnerNoStoreMiddleware,
+    rateLimit("partner-direct-upload", 30, 10 * 60 * 1000),
+    async (req, res) => {
+      if (!privateObjectStorageEnabled()) {
+        // Local/Manus deployments retain the original base64 database upload path.
+        res.status(404).json({ error: "Direct upload is not configured" });
+        return;
+      }
+      try {
+        const payload = validateDirectUploadPayload(req.body);
+        const db = await getDb();
+        if (!db) {
+          jsonError(res, 503, "Submission service is temporarily unavailable");
+          return;
+        }
+        const directUpload = await createDirectUpload(payload.type);
+        if (!directUpload) {
+          jsonError(res, 503, "Direct upload is temporarily unavailable");
+          return;
+        }
+        await db.insert(partnerAssets).values({
+          id: directUpload.id,
+          name: payload.name,
+          type: payload.type,
+          size: payload.size,
+          dataBase64: objectStoragePointer(directUpload.key),
+        });
+        res.status(201).json({
+          id: directUpload.id,
+          name: payload.name,
+          type: payload.type,
+          size: payload.size,
+          uploadUrl: directUpload.uploadUrl,
+        });
+      } catch (error) {
+        if (error instanceof ZodError) {
+          jsonError(res, 400, issueMessage(error));
+          return;
+        }
+        if (
+          error instanceof Error &&
+          /file|format|type|5 MB/i.test(error.message)
+        ) {
+          jsonError(res, 400, error.message);
+          return;
+        }
+        console.error("[Partner] Direct upload preparation failed", error);
+        jsonError(res, 500, "Unable to prepare this file upload");
+      }
+    }
+  );
+
+  app.post(
     "/api/partner/upload",
     partnerNoStoreMiddleware,
     rateLimit("partner-upload", 30, 10 * 60 * 1000),
@@ -464,14 +559,12 @@ export function registerPartnerRoutes(app: Express): void {
           size: upload.detected.bytes.length,
           dataBase64: upload.detected.bytes.toString("base64"),
         });
-        res
-          .status(201)
-          .json({
-            id,
-            name: upload.name,
-            type: upload.detected.type,
-            size: upload.detected.bytes.length,
-          });
+        res.status(201).json({
+          id,
+          name: upload.name,
+          type: upload.detected.type,
+          size: upload.detected.bytes.length,
+        });
       } catch (error) {
         if (error instanceof ZodError) {
           jsonError(res, 400, issueMessage(error));
@@ -509,11 +602,22 @@ export function registerPartnerRoutes(app: Express): void {
           return;
         }
         // Claimed assets are submitted files and are intentionally immutable here.
+        const candidates = privateObjectStorageEnabled()
+          ? await db
+              .select({ dataBase64: partnerAssets.dataBase64 })
+              .from(partnerAssets)
+              .where(
+                and(eq(partnerAssets.id, id), isNull(partnerAssets.inquiryId))
+              )
+              .limit(1)
+          : [];
         await db
           .delete(partnerAssets)
           .where(
             and(eq(partnerAssets.id, id), isNull(partnerAssets.inquiryId))
           );
+        const key = candidates[0] && objectStorageKey(candidates[0].dataBase64);
+        if (key) await deletePrivateObject(key).catch(() => {});
         res.status(204).end();
       } catch (error) {
         console.error("[Partner] Upload removal failed", error);
@@ -777,6 +881,16 @@ export function registerPartnerRoutes(app: Express): void {
         // Only claimed files are available even to administrators; unsubmitted uploads remain inaccessible.
         if (!asset || asset.inquiryId === null) {
           jsonError(res, 404, "Asset not found");
+          return;
+        }
+        const storageKey = objectStorageKey(asset.dataBase64);
+        if (storageKey) {
+          const url = await createPrivateDownloadUrl(
+            storageKey,
+            asset.name,
+            asset.type
+          );
+          res.redirect(302, url);
           return;
         }
         const bytes = Buffer.from(asset.dataBase64, "base64");

@@ -672,3 +672,13 @@ Verification: diagnosed the original unstyled static fallback rendering the1600�
 ## [x] Preview runtime recovery — October 30
 
 Restore the temporary Preview after it showed “Setting up your project.” The development listener had stopped because Vite’s watcher followed a sandbox filesystem symlink loop at `/run/udev/watch/1`. Configure the embedded Vite server to use polling, avoid following symlinks, and ignore dependency, build, Git, and debug-log directories. Verify the listener, health endpoint, route manifest, hero asset, stable Preview gateway, and browser-rendered landing page all recover. Note: Preview is temporary and can go offline when the Sandbox sleeps; the project has not been published because `auto_publish` is disabled.
+
+## [ ] GitHub and Vercel production export — November 1
+
+Export the current Peplogix Partner Landing Page as one downloadable, editable source-project ZIP without redesigning or modifying its approved desktop/mobile appearance. Include all source, images, components, styling, icons, typography, responsive behavior, forms, navigation, interactions, configurations, dependency manifests, Vercel deployment configuration, environment-variable template, and a README with exact GitHub/Vercel installation, build, environment, migration, and deployment steps. Preserve backend-backed inquiries and private uploads through an appropriate Vercel runtime adapter; never include secret values. Verify the production build, a local production-server smoke test, and the final archive contents before delivery.
+
+## [x] GitHub + Vercel source export
+
+- Preserve the existing React/Vite landing page, visual assets, responsive behavior, inquiry flow, dashboard, database schema, and server routes as editable source rather than a static screenshot.
+- Add Vercel Express entrypoint, Vercel static build configuration, secret-free environment template, portable local assets, password-protected dashboard mode, and private S3-compatible direct-upload path that retains the existing 5 MB-per-file capability on Vercel.
+- Verify TypeScript, backend tests, original Node build, Vercel static build, root serverless-style smoke routes, desktop/mobile visual regressions, live preview, and catalog interactions before packaging a secret-free ZIP.

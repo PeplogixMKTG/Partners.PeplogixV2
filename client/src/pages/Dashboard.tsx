@@ -266,6 +266,11 @@ export default function Dashboard() {
   const [activationCode, setActivationCode] = useState("");
   const [activating, setActivating] = useState(false);
   const [activationError, setActivationError] = useState<string | null>(null);
+  const [loginEmail, setLoginEmail] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
+  const [loginPending, setLoginPending] = useState(false);
+  const [loginError, setLoginError] = useState<string | null>(null);
+  const authMode = window.__MANUS_CONFIG__?.authMode ?? "manus";
 
   const loadList = useCallback(async () => {
     setLoadingList(true);
@@ -368,6 +373,31 @@ export default function Dashboard() {
     [activationCode, refresh]
   );
 
+  const passwordLogin = useCallback(
+    async (event: FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      setLoginPending(true);
+      setLoginError(null);
+      try {
+        await apiPost<{ success: true }>("/api/admin/login", {
+          email: loginEmail.trim(),
+          password: loginPassword,
+        });
+        setLoginPassword("");
+        await refresh();
+      } catch (caught) {
+        setLoginError(
+          caught instanceof Error
+            ? caught.message
+            : "Unable to sign in securely."
+        );
+      } finally {
+        setLoginPending(false);
+      }
+    },
+    [loginEmail, loginPassword, refresh]
+  );
+
   useEffect(() => {
     if (user?.role === "admin") void loadList();
   }, [loadList, user?.role]);
@@ -395,13 +425,60 @@ export default function Dashboard() {
             Sign in with your authorized Peplogix account to review confidential
             partner submissions and brand assets.
           </p>
-          <button
-            className="dashboard-button"
-            type="button"
-            onClick={() => startLogin()}
-          >
-            Sign in securely
-          </button>
+          {authMode === "password" ? (
+            <form
+              className="dashboard-auth__form"
+              onSubmit={event => void passwordLogin(event)}
+            >
+              <label htmlFor="dashboard-admin-email">
+                Email
+                <input
+                  id="dashboard-admin-email"
+                  type="email"
+                  autoComplete="username"
+                  value={loginEmail}
+                  onChange={event => setLoginEmail(event.target.value)}
+                  required
+                />
+              </label>
+              <label htmlFor="dashboard-admin-password">
+                Password
+                <input
+                  id="dashboard-admin-password"
+                  type="password"
+                  autoComplete="current-password"
+                  value={loginPassword}
+                  onChange={event => setLoginPassword(event.target.value)}
+                  required
+                />
+              </label>
+              {loginError && (
+                <p className="dashboard-message" role="alert">
+                  {loginError}
+                </p>
+              )}
+              <button
+                className="dashboard-button"
+                type="submit"
+                disabled={loginPending || !loginEmail.trim() || !loginPassword}
+              >
+                {loginPending ? "Signing in…" : "Sign in securely"}
+              </button>
+            </form>
+          ) : authMode === "manus" ? (
+            <button
+              className="dashboard-button"
+              type="button"
+              onClick={() => startLogin()}
+            >
+              Sign in securely
+            </button>
+          ) : (
+            <p className="dashboard-message" role="alert">
+              Dashboard access has not been configured. Set the admin
+              environment variables described in the deployment README.
+            </p>
+          )}
         </section>
       </main>
     );

@@ -1,14 +1,17 @@
 # Peplogix Partner Portal
 
 ## Scope and implementation
+
 Build the complete standalone partner landing page described in the supplied requirements, using the prepared React/TypeScript client, Express/tRPC server, managed MySQL database, and existing Manus OAuth for the internal owner/admin dashboard. A single public page contains the marketing hero and in-page four-step inquiry. The only supporting application page is the protected inquiries dashboard. Submission is public, inquiry reading and asset downloads require validated admin authentication. No affiliate, referral, commission or pricing content.
 
 Preserve every question and conditional branch in the supplied requirements. The brand step is skipped when no selected service needs customization; the four-step progress communicates the skipped state. Requirements for wholesale, storefront, dropshipping and 3PL are collected within partnership preferences. Persist full structured inquiry payload, sanitized raster logo and document/image asset bytes, date, and idempotency token in managed MySQL; secure authenticated download endpoints prevent public exposure of confidential branding assets. File size/count limits and allowlisted signatures are validated server-side. This provides durable protected storage without pretending public object URLs are private. No email/CRM integration is assumed.
 
 ## Design
+
 Reuse the existing Peplogix brand: deep navy typography, bright turquoise molecule accents, coral calls to action and warm white backgrounds. Editorial, science-led product presentation with an asymmetrical two-column hero; oversized navy headline and teal emphasis, realistic vial composition, quiet molecular orbit motif, outlined chips and restrained floating callouts. White header with supplied logo, subtle section links and a coral CTA. Partner opportunities flow into the inquiry panel with a narrow numbered progress rail and clean spacious form content. Rounded corners are modest, not pill-heavy. Use the current site's sans-serif direction with Geist headings and body, matching the supplied reference site. Navy builds credibility; teal conveys scientific precision; coral marks decisive actions. Motion is short 180–300ms opacity/translate transitions, with reduced-motion respected. Controls show clear focus/selection and never rely on color alone. Keep logo proportions and use the supplied original logo, not a recreated wordmark. Voice is clear, professional and encouraging: “Build Your Brand With Peplogix.” and “Your products. Your brand. Your platform.”
 
 ## Structure
+
 - `client/src/pages/Home.tsx`: public landing page composition and entry to the inquiry.
 - `client/src/components/partner/`: inquiry step components, accessible fields, uploads, live vial preview.
 - `client/src/pages/Dashboard.tsx`: authenticated owner/admin submission list, details and protected assets.
@@ -18,6 +21,7 @@ Reuse the existing Peplogix brand: deep navy typography, bright turquoise molecu
 - `client/public/`: small brand assets, favicon and complete route manifest.
 
 ## Deployment constraints
+
 Publish the saved version through the managed container deployment. The intended custom domain is `partners.peplogixpeptide.com`; connecting it requires domain/DNS ownership and cannot be assumed. Provide the actual published managed URL if publication completes and identify custom-domain setup separately. Team access uses real Manus authentication and admin authorization; only the configured project owner or explicitly authorized admins may read inquiries.
 
 ## Owner access provisioning
@@ -67,3 +71,15 @@ The approved hero image is served from `client/public/brand/peplogix-partner-her
 ## Preview watcher recovery — October 30
 
 The development Preview process crashed while Vite followed a sandbox symlink loop under `/run/udev/watch/1`, leaving the platform “Setting up your project” fallback. The embedded Vite middleware now enables polling, disables symlink following, and ignores dependency/build/Git/debug-log directories. Start the temporary development listener with polling enabled as well. This affects only development Preview file watching; the production build remains unchanged. The gateway’s yellow temporary-preview status is expected until the user explicitly publishes a deployed version.
+
+## GitHub + Vercel export — November 1
+
+The export preserves the existing React/Vite/Express architecture and all visual source files. It adds a root `app.ts` that Vercel recognizes as an Express application, extracting shared middleware/routes into `server/app.ts` so local development, the original Docker/Node production server, and Vercel invoke the identical API logic. `pnpm build:vercel` runs the existing Vite client bundle with a Vercel output override into root `public/`; the landing components, styling, imagery, and responsive breakpoints are not redesigned or regenerated.
+
+External Vercel deployments require `DATABASE_URL` because secure inquiry records and private uploads are persisted in MySQL. For the internal dashboard, a Vercel-safe password mode is enabled only by `ADMIN_EMAIL`, `ADMIN_PASSWORD`, and `SESSION_SECRET`. Existing Manus OAuth remains optional and unchanged when its values are configured. `.env.example` contains names/placeholders only, and the README gives exact local, GitHub, migration, Vercel environment, build, and deployment steps.
+
+The final ZIP will exclude generated build output, dependencies, `.git`, local environment files, test screenshots, credentials, and Manus-only runtime artifacts while including the full editable source, migrations, tests, lockfile, Vercel configuration, assets, Dockerfile, and README.
+
+## Export completion — November 1
+
+The final export is self-contained for GitHub and Vercel: its approved hero, logo, live transparent vial, and live capsule-bottle source assets are served from `client/public/brand/`, not Manus storage. The project retains the unchanged landing experience while the deployment layer adds a root Express export, Vercel static output, optional password mode for the internal dashboard, and S3-compatible direct browser uploads for the existing full-size private attachment workflow.

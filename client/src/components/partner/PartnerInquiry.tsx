@@ -87,6 +87,10 @@ interface UploadResponse {
   size: number;
 }
 
+interface DirectUploadResponse extends UploadResponse {
+  uploadUrl: string;
+}
+
 const steps = [
   { number: 1, label: "About Your Business" },
   { number: 2, label: "Partnership Preferences" },
@@ -147,6 +151,67 @@ async function uploadFile(
   file: File,
   onProgress: (progress: number) => void
 ): Promise<UploadResponse> {
+  const directRequest = await fetch("/api/partner/upload-url", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      name: file.name,
+      type: file.type || "application/octet-stream",
+      size: file.size,
+    }),
+  });
+
+  if (directRequest.status !== 404) {
+    const body = (await directRequest.json().catch(() => null)) as
+      | ({ error?: string } & Partial<DirectUploadResponse>)
+      | null;
+    if (!directRequest.ok || !body?.id || !body.uploadUrl) {
+      throw new Error(
+        body?.error ||
+          "We could not prepare this file upload. Please try again."
+      );
+    }
+    const direct: DirectUploadResponse = {
+      id: body.id,
+      uploadUrl: body.uploadUrl,
+      name: body.name || file.name,
+      type: body.type || file.type || "application/octet-stream",
+      size: body.size || file.size,
+    };
+    return new Promise((resolve, reject) => {
+      const request = new XMLHttpRequest();
+      request.open("PUT", direct.uploadUrl);
+      request.setRequestHeader(
+        "Content-Type",
+        file.type || "application/octet-stream"
+      );
+      request.upload.onprogress = event => {
+        if (event.lengthComputable)
+          onProgress(
+            Math.max(1, Math.round((event.loaded / event.total) * 100))
+          );
+      };
+      request.onerror = () => {
+        discardUpload(direct.id);
+        reject(
+          new Error(
+            "Upload failed. Please check your connection and try again."
+          )
+        );
+      };
+      request.onload = () => {
+        if (request.status >= 200 && request.status < 300) {
+          onProgress(100);
+          resolve(direct);
+        } else {
+          discardUpload(direct.id);
+          reject(new Error("We could not upload this file. Please try again."));
+        }
+      };
+      request.send(file);
+    });
+  }
+
   const data = await readFileAsBase64(file);
 
   return new Promise((resolve, reject) => {
