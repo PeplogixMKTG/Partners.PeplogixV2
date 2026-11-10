@@ -27,11 +27,9 @@ export const partnershipOptions = [
       "Stock your clinic, spa, or retail shelves with our full product line at tiered wholesale pricing. Ready to launch your own formulas? Our contract manufacturing service takes your product from formulation to finished, labeled goods, with private-label packaging and quality-controlled production, all at scale.",
   },
   {
-    value: "503a FDA Approved Products and Medical Supplies",
+    value: "503A Compounded Medications and Medical Supplies",
     description:
       "Give your patients access to compounded medications prepared by licensed 503A pharmacy partners and dispensed under valid, patient-specific prescriptions. Pair them with the medical supplies your practice relies on, such as syringes, alcohol prep pads, and other clinical essentials, all ordered through one convenient portal and shipped directly to you or your patients.",
-    clarification:
-      "503A compounded medications are not FDA-approved. FDA approval applies only to products that have individually received FDA approval, not to compounded preparations.",
   },
   {
     value: "Education and Training",
@@ -60,6 +58,7 @@ export const legacyPartnershipValues = [
   "3PL Warehousing & Fulfillment",
   "Wholesale + Custom Storefront",
   "Other Partnership Opportunity",
+  "503a FDA Approved Products and Medical Supplies",
 ] as const;
 
 const acceptedPartnershipValues = [

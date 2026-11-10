@@ -143,3 +143,9 @@ FDA states compounded medications are not FDA-approved. Requested permission to 
 User requested original medical title be kept. Keep exact original title and supplied description; display an immediate, readable clarification beneath it that 503A compounded medications are not FDA-approved, avoiding an unqualified false medical claim. All seven supplied titles and descriptions retained.
 
 November10 local implementation validated: seven complete descriptions and single-column desktop/tablet/mobile layout, conditional mappings and safe form flows passed. New service names render in full-entry emails; legacy names remain accepted only for historical/in-flight compatibility. Existing hero/assets/catalog/owner access/notification settings unchanged. Both builds and250 backend tests passed.
+
+November10 deployment complete: source tree synced to V2 commitc58b6bb; its GitHub-triggered Vercel deployment dpl_CUnuH8H5dTCrZX7mHywgbLjF7csp reached Ready. Only selected service-card copy/layout, mappings and test fixtures changed; all other design, assets and email/admin settings preserved.
+
+## Approved 503A wording correction — November10,17:30
+
+User explicitly approved title “503A Compounded Medications and Medical Supplies” and removal of the added clarification. Rename the shared fourth service, delete only the additional clarification markup/data/style, keep description unchanged, update icon mapping and matching tests. Preserve old displayed title only in hidden legacy validation for historical/in-flight records. No redesign, changes to other form paths, database migration or environment configuration. Sync existing V2 history and verify its GitHub-triggered production deployment.

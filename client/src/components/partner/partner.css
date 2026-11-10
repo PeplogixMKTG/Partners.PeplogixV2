@@ -467,12 +467,6 @@
   font-size: 0.875rem;
   line-height: 1.5;
 }
-.partner-option-card__content > .partner-option-card__clarification {
-  margin-top: 0.4rem;
-  padding-top: 0.6rem;
-  border-top: 1px solid #dce5e7;
-  color: var(--partner-navy);
-}
 .partner-divider {
   height: 1px;
   margin: 2.25rem 0;

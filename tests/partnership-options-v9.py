@@ -8,7 +8,7 @@ NAMES = [
     "Turnkey Business",
     "Product Supply and 3PL Fulfilment Only",
     "Wholesale and Contract Manufacturing",
-    "503a FDA Approved Products and Medical Supplies",
+    "503A Compounded Medications and Medical Supplies",
     "Education and Training",
     "Payment Processing",
     "Marketing and Compliance Resources",
@@ -58,7 +58,7 @@ with sync_playwright() as p:
         expect(cards).to_have_count(7)
         assert cards.locator("strong").all_text_contents() == NAMES
         assert cards.locator(".partner-option-card__content > span:first-of-type").all_text_contents() == DESCRIPTIONS
-        expect(page.locator(".partner-option-card__clarification")).to_contain_text("503A compounded medications are not FDA-approved")
+        expect(page.locator(".partner-option-card__clarification")).to_have_count(0)
         assert cards.locator(".partner-option-card__icon svg").count() == 7
         boxes = [cards.nth(i).bounding_box() for i in range(7)]
         for i, box in enumerate(boxes):

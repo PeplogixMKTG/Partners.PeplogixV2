@@ -730,7 +730,7 @@ Replace existing notification recipients with only partner@peplogix.com, mgt@pep
 
 November3,10:27 verification: PARTNER_NOTIFICATION_TO replaced successfully in protected Production with exactly partner@peplogix.com,mgt@peplogix.com,wnagi@peplogix.com,sbuculesei@peplogix.com,gpernudi@peplogix.com. Existing source redeployed as dpl_91GDPjhV5w4XUKy2E3U3yKDRRbwM, Ready and aliased to https://partners.peplogix.com. Previous Gelsey notification address removed. Sender, domain/DNS, website/backend code and administrator access/credentials unchanged. No historical email replay or new test submission created; future-mailbox delivery not yet tested.
 
-## [ ] Seven partnership opportunities in one column — November 10
+## [x] Seven partnership opportunities in one column — November 10
 
 Replace the old Step2 cards with only the following seven options, in this order, retaining multi-select and all existing visual identity and unrelated page sections. Arrange top-to-bottom in one column on desktop and mobile. Keep full descriptions readable, with no truncation:
 
@@ -747,3 +747,11 @@ Keep values selected across Back/Continue/edit, allow multiple new opportunities
 Medical wording resolved: user said Keep the original title. Original medical title retained with its complete description. A directly visible clarification states “503A compounded medications are not FDA-approved. FDA approval applies only to products that have individually received FDA approval, not to compounded preparations.”
 
 November10 validation: All seven supplied titles and full descriptions matched exactly in a read-only browser flow on desktop1440, tablet768 and mobile375; cards share one vertical column with no horizontal overflow. Multi-select, generic-only review skip, relevant conditional validation, Back/Continue state, vial/capsule switches, full summary and intercepted (non-persisted) submission passed. Safe landing/logo and catalog regressions passed. 250 isolated backend tests passed, including 70 new branch/legacy/schema/email tests. Original Node build and Vercel dist/bundled-function build succeeded. No production inquiry, upload or email created, and no database/auth/notification environment changes. GitHub/Vercel deployment pending.
+
+Deployment November10,16:56: Tested source checkpoint365cf49 saved to managed main; exact same project tree synced through a normal fast-forward PeplogixMKTG-authored commit c58b6bbbd4d083e3ecf41ed0132f2e864bd88b71 to the existing Partners.PeplogixV2 main, preserving rewritten history. Existing GitHub-triggered Vercel production deployment dpl_CUnuH8H5dTCrZX7mHywgbLjF7csp (partners-peplogix-v2-ovk35rw10-peplogix.vercel.app) reached READY. No redundant redeploy, environment changes, DNS changes or live-email tests were made. Seven complete supplied descriptions, original medical title plus immediate factual clarification, single-column cards, new conditional paths and old-session compatibility delivered. Existing five-recipient notifications, dashboard ownership and all unrelated landing elements preserved.
+
+## [ ] Approved 503A title and clarification removal — November10,17:30
+
+Change only the fourth visible partnership title to “503A Compounded Medications and Medical Supplies” and remove the additional clarification beneath it. Keep its supplied description byte-for-byte unchanged. Retain all other choices, order, icons, single-column layout, form logic, assets, dashboard access and notification configuration. Accept the previously visible medical title only as a hidden historical/in-flight value so submissions from already-open tabs are not broken. Update the matching icon key and automated assertions, build and validate without creating submissions/emails, and fast-forward the existing V2 repository for its connected Vercel production deployment.
+
+Local verification: approved new title present, clarification data/markup/style removed, all seven complete descriptions byte-for-byte unchanged. TypeScript, isolated backend tests, original production build and Vercel build succeeded. Unrelated page sections, images, dashboard and notification settings untouched. Deployment pending.

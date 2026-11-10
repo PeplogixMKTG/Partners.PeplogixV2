@@ -299,7 +299,7 @@ function optionIcon(value: string) {
     return <Truck aria-hidden="true" />;
   if (value === "Wholesale and Contract Manufacturing")
     return <PackageCheck aria-hidden="true" />;
-  if (value === "503a FDA Approved Products and Medical Supplies")
+  if (value === "503A Compounded Medications and Medical Supplies")
     return <ShieldCheck aria-hidden="true" />;
   if (value === "Education and Training")
     return <GraduationCap aria-hidden="true" />;
@@ -1215,11 +1215,6 @@ export default function PartnerInquiry() {
               <span className="partner-option-card__content">
                 <strong>{option.value}</strong>
                 <span>{option.description}</span>
-                {"clarification" in option && (
-                  <span className="partner-option-card__clarification">
-                    {option.clarification}
-                  </span>
-                )}
               </span>
             </label>
           );

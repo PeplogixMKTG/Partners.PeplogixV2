@@ -532,10 +532,11 @@ describe("new partnership names in rendered email", () => {
   });
 });
 
-describe("medical service clarification", () => {
-  it("retains the complete clarification distinguishing compounded medications from individually FDA-approved products", () => {
-    expect(partnershipOptions[3].clarification).toBe(
-      "503A compounded medications are not FDA-approved. FDA approval applies only to products that have individually received FDA approval, not to compounded preparations."
+describe("approved medical service title", () => {
+  it("uses the approved title without an additional clarification", () => {
+    expect(partnershipOptions[3].value).toBe(
+      "503A Compounded Medications and Medical Supplies"
     );
+    expect(partnershipOptions[3]).not.toHaveProperty("clarification");
   });
 });
