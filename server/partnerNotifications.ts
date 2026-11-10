@@ -73,6 +73,7 @@ export function notificationConfig() {
 export function buildNotificationRecord(input: {
   id: string;
   submittedAt: Date;
+  sourceDomain?: string | null;
   data: PartnerInquiryData;
   assets: Pick<PartnerAsset, "name" | "type" | "size" | "role">[];
 }) {

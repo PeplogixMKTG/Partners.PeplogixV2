@@ -174,6 +174,120 @@ describe("renderPartnerEmail", () => {
     ).toEqual(result);
   });
 
+  it.each([
+    "weg.partners.peplogix.com",
+    "partners.peplogix.com",
+    "jvega.partners.peplogix.com",
+    "miked.partners.peplogix.com",
+    "eric.partners.peplogix.com",
+  ])("prominently attributes a submission from %s", sourceDomain => {
+    const fixture = input({ sourceDomain });
+    const result = renderPartnerEmail(fixture);
+    expect(result.subject).toBe(
+      `New Peplogix Partnership Inquiry [${sourceDomain}] — Aurora Partner Company`
+    );
+    expect(fieldHtml(result.html, "Submitted from domain")).toBe(
+      `<strong>${sourceDomain}</strong>`
+    );
+    expect(result.text).toContain(`Submitted from domain: ${sourceDomain}`);
+    expect(result.html.indexOf(">Submitted from domain</th>")).toBeLessThan(
+      result.html.indexOf(">Inquiry ID</th>")
+    );
+    expect(result.text.indexOf("Submitted from domain:")).toBeLessThan(
+      result.text.indexOf("Inquiry ID:")
+    );
+    expect(result.reply_to).toBe(fixture.data.email);
+    for (const key of inquiryKeys)
+      expect(result.text).toContain(`${PARTNER_EMAIL_FIELDS[key].label}:`);
+    for (const asset of fixture.assets)
+      expect(result.text).toContain(`Name: ${asset.name}`);
+    expect(result).not.toHaveProperty("attachments");
+    expect(result.text).toContain("no public file links or attachments");
+  });
+
+  it("uses the normalized canonical domain in both formats and the subject", () => {
+    const result = renderPartnerEmail(
+      input({ sourceDomain: "WEG.PARTNERS.PEPLOGIX.COM" })
+    );
+    expect(result.subject).toBe(
+      "New Peplogix Partnership Inquiry [weg.partners.peplogix.com] — Aurora Partner Company"
+    );
+    expect(result.text).toContain(
+      "Submitted from domain: weg.partners.peplogix.com"
+    );
+    expect(fieldHtml(result.html, "Submitted from domain")).toBe(
+      "<strong>weg.partners.peplogix.com</strong>"
+    );
+    expect(result.html).not.toContain("WEG.PARTNERS.PEPLOGIX.COM");
+  });
+
+  it.each([
+    undefined,
+    null,
+    "",
+    "unknown.example.com",
+    "unknown.partners.peplogix.com",
+    " weg.partners.peplogix.com ",
+    "weg.partners.peplogix.com.evil.example",
+  ])("does not attribute an absent or unknown source: %j", sourceDomain => {
+    const result = renderPartnerEmail(input({ sourceDomain }));
+    expect(result.subject).toBe(
+      "New Peplogix Partnership Inquiry — Aurora Partner Company"
+    );
+    expect(result.text).toContain("Submitted from domain: Not recorded");
+    expect(fieldHtml(result.html, "Submitted from domain")).toBe(
+      "<strong>Not recorded</strong>"
+    );
+    expect(result).toEqual(renderPartnerEmail(input()));
+  });
+
+  it.each([
+    "weg.partners.peplogix.com\r\nBcc: attacker@example.com",
+    "weg.partners.peplogix.com\nSubject: forged inquiry",
+    "weg.partners.peplogix.com\u0000",
+    "weg.partners.peplogix.com\u202e",
+    '<img src="https://tracker.example/pixel" onerror="alert(1)">',
+    'weg.partners.peplogix.com</strong><script>alert("source")</script>',
+  ])(
+    "rejects source injection without changing the email: %j",
+    sourceDomain => {
+      const result = renderPartnerEmail(input({ sourceDomain }));
+      expect(result).toEqual(renderPartnerEmail(input()));
+      expect(result.subject).not.toContain(sourceDomain);
+      expect(result.text).not.toContain(sourceDomain);
+      expect(result.html).not.toMatch(/<(?:img|script|iframe)\b/i);
+    }
+  );
+
+  it.each([
+    "weg.partners.peplogix.com",
+    "partners.peplogix.com",
+    "jvega.partners.peplogix.com",
+    "miked.partners.peplogix.com",
+    "eric.partners.peplogix.com",
+  ])("keeps the configured dashboard canonical for source %s", sourceDomain => {
+    const fixture = input({
+      sourceDomain,
+      appBaseUrl:
+        "https://partners.peplogix.com/old-path?secret=drop-me#old-route",
+    });
+    const result = renderPartnerEmail(fixture);
+    const url = `https://partners.peplogix.com/dashboard?inquiry=${fixture.id}`;
+    expect(result.html.match(/<a\b/g)).toHaveLength(1);
+    expect(result.html).toContain(`href="${url}"`);
+    expect(result.text).toContain(`Open authenticated dashboard:\n${url}`);
+    expect(result.html).not.toContain("drop-me");
+    expect(result.text).not.toContain("drop-me");
+    expect(result.html).not.toMatch(
+      /href="https?:\/\/[^"\s]*\.partners\.peplogix\.com\//
+    );
+    for (const body of [result.html, result.text]) {
+      expect(body).toContain("Private submission");
+      expect(body).toContain("Authorized administrator sign-in is required");
+      expect(body).toContain("file metadata only");
+    }
+  });
+
   it("shows all service sections and all supplied conditional fields regardless of selected interests", () => {
     const data = fullInquiry();
     data.partnerships = ["Other Partnership Opportunity"];
@@ -299,28 +413,39 @@ describe("renderPartnerEmail", () => {
     );
   });
 
-  it("strips CRLF/control characters from the subject but does not truncate the company in the form entry", () => {
-    const company = `Aurora\r\nBcc: attacker@example.com\u0000\t\u007f\u0085\u2028\u2029\u202e${"Z".repeat(250)}`;
-    const result = renderPartnerEmail(
-      input({ data: { ...fullInquiry(), company } })
-    );
-    expect(result.subject).toHaveLength(200);
-    expect(result.subject).toMatch(
-      /^New Peplogix Partnership Inquiry — AuroraBcc:/
-    );
-    expect(result.subject).not.toMatch(/[\p{Cc}\p{Cf}\u2028\u2029]/u);
-    expect(result.text).toContain(`Company: ${company}`);
-    expect(result.html).toContain("Z".repeat(250));
-  });
+  it.each([undefined, "weg.partners.peplogix.com"])(
+    "strips subject controls without truncating the entry for source %j",
+    sourceDomain => {
+      const company = `Aurora\r\nBcc: attacker@example.com\u0000\t\u007f\u0085\u2028\u2029\u202e${"Z".repeat(250)}`;
+      const result = renderPartnerEmail(
+        input({ sourceDomain, data: { ...fullInquiry(), company } })
+      );
+      expect(result.subject).toHaveLength(200);
+      expect(
+        result.subject.startsWith(
+          `New Peplogix Partnership Inquiry${sourceDomain ? ` [${sourceDomain}]` : ""} — AuroraBcc:`
+        )
+      ).toBe(true);
+      expect(result.subject).not.toMatch(/[\p{Cc}\p{Cf}\u2028\u2029]/u);
+      expect(result.text).toContain(`Company: ${company}`);
+      expect(result.html).toContain("Z".repeat(250));
+    }
+  );
 
-  it("bounds subjects containing Unicode company names to 200 code units without splitting a surrogate pair", () => {
-    const result = renderPartnerEmail(
-      input({ data: { ...fullInquiry(), company: "🧬".repeat(250) } })
-    );
-    expect(result.subject.length).toBeLessThanOrEqual(200);
-    expect(result.subject).not.toMatch(/[\uD800-\uDBFF]$/);
-    expect(result.text).toContain("🧬".repeat(250));
-  });
+  it.each([undefined, "weg.partners.peplogix.com"])(
+    "bounds Unicode subjects without splitting a surrogate pair for source %j",
+    sourceDomain => {
+      const result = renderPartnerEmail(
+        input({
+          sourceDomain,
+          data: { ...fullInquiry(), company: "🧬".repeat(250) },
+        })
+      );
+      expect(result.subject.length).toBeLessThanOrEqual(200);
+      expect(result.subject).not.toMatch(/[\uD800-\uDBFF]$/);
+      expect(result.text).toContain("🧬".repeat(250));
+    }
+  );
 
   it.each([
     "alexandra@example.com\r\nBcc: attacker@example.com",

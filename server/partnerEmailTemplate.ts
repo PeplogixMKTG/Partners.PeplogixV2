@@ -3,6 +3,7 @@ import {
   type PartnerInquiryData,
   type PartnerSubmission,
 } from "../shared/partner";
+import { normalizePartnerSourceDomain } from "./partnerSource";
 
 export type PartnerEmailAsset = {
   name: string;
@@ -14,6 +15,7 @@ export type PartnerEmailAsset = {
 export type RenderPartnerEmailInput = {
   id: string;
   submittedAt: Date | string;
+  sourceDomain?: string | null;
   data: PartnerInquiryData;
   assets: PartnerEmailAsset[];
   appBaseUrl: string;
@@ -231,6 +233,8 @@ export function renderPartnerEmail(
 ): RenderedPartnerEmail {
   const { id, data, assets, appBaseUrl } = input;
   const link = dashboardUrl(appBaseUrl, id);
+  const sourceDomain = normalizePartnerSourceDomain(input.sourceDomain);
+  const sourceLabel = sourceDomain ?? "Not recorded";
   const reply_to = safeReplyTo(data.email);
   const date =
     input.submittedAt instanceof Date
@@ -240,14 +244,19 @@ export function renderPartnerEmail(
     throw new Error("submittedAt must be a valid date");
   const submittedAt = date.toISOString();
   const confirmed: PartnerSubmission["confirmed"] = true;
-  const subject = `New Peplogix Partnership Inquiry — ${data.company}`
-    .replace(/[\p{Cc}\p{Cf}\u2028\u2029]/gu, "")
-    .slice(0, 200)
-    .replace(/[\uD800-\uDBFF]$/, "");
+  const subject =
+    `New Peplogix Partnership Inquiry${sourceDomain ? ` [${sourceDomain}]` : ""} — ${data.company}`
+      .replace(/[\p{Cc}\p{Cf}\u2028\u2029]/gu, "")
+      .slice(0, 200)
+      .replace(/[\uD800-\uDBFF]$/, "");
 
   let sections = sectionHtml(
     "Submission details",
     [
+      rowHtml(
+        "Submitted from domain",
+        `<strong>${escapeHtml(sourceLabel)}</strong>`
+      ),
       rowHtml("Inquiry ID", multilineHtml(id)),
       rowHtml("Submitted at (UTC)", escapeHtml(submittedAt)),
       rowHtml("Confirmed accuracy", valueHtml(confirmed)),
@@ -255,7 +264,7 @@ export function renderPartnerEmail(
   );
   const textSections = [
     "PEPLOGIX | NEW PARTNERSHIP INQUIRY",
-    `Inquiry ID: ${id}\nSubmitted at (UTC): ${submittedAt}\nConfirmed accuracy: ${scalarText(confirmed)}`,
+    `Submitted from domain: ${sourceLabel}\nInquiry ID: ${id}\nSubmitted at (UTC): ${submittedAt}\nConfirmed accuracy: ${scalarText(confirmed)}`,
   ];
 
   for (const section of SECTIONS) {

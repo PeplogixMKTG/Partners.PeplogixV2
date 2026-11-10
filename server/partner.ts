@@ -33,6 +33,7 @@ import {
   objectStoragePointer,
   privateObjectStorageEnabled,
 } from "./privateObjectStorage";
+import { partnerSourceDomain } from "./partnerSource";
 import { sdk } from "./_core/sdk";
 
 const MAX_FILE_BYTES = 5 * 1024 * 1024;
@@ -384,7 +385,10 @@ async function findSubmissionByRequestId(requestId: string) {
   return records[0] ?? null;
 }
 
-async function createInquiry(submission: PartnerSubmission) {
+async function createInquiry(
+  submission: PartnerSubmission,
+  sourceDomain: string | null
+) {
   const db = await getDb();
   if (!db) throw new Error("Database unavailable");
 
@@ -446,7 +450,7 @@ async function createInquiry(submission: PartnerSubmission) {
       lastName: submission.data.lastName,
       email: submission.data.email,
       partnerships: JSON.stringify(submission.data.partnerships),
-      data: JSON.stringify(submission.data),
+      data: JSON.stringify({ ...submission.data, sourceDomain }),
       submittedAt,
     });
 
@@ -467,6 +471,7 @@ async function createInquiry(submission: PartnerSubmission) {
     const notification = buildNotificationRecord({
       id: inquiryId,
       submittedAt,
+      sourceDomain,
       data: submission.data,
       assets: assets.map(asset => ({
         name: asset.name,
@@ -760,7 +765,10 @@ export function registerPartnerRoutes(app: Express): void {
         }
 
         const submission = partnerSubmissionSchema.parse(req.body);
-        const created = await createInquiry(submission);
+        const created = await createInquiry(
+          submission,
+          partnerSourceDomain(req)
+        );
         await tryDeliverNotification(created.id);
         res.status(201).json(submissionResponse(created));
       } catch (error) {

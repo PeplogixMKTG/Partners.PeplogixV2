@@ -149,3 +149,9 @@ November10 deployment complete: source tree synced to V2 commitc58b6bb; its GitH
 ## Approved 503A wording correction — November10,17:30
 
 User explicitly approved title “503A Compounded Medications and Medical Supplies” and removal of the added clarification. Rename the shared fourth service, delete only the additional clarification markup/data/style, keep description unchanged, update icon mapping and matching tests. Preserve old displayed title only in hidden legacy validation for historical/in-flight records. No redesign, changes to other form paths, database migration or environment configuration. Sync existing V2 history and verify its GitHub-triggered production deployment.
+
+Approved 503A correction deployed17:33: GitHub cf9ee0b, Vercel READY dpl_6KNVnhw2sY4ycRaaNejMHouzxQeK; live title and removed clarification confirmed, descriptions unchanged.
+
+## Source-domain email attribution — November10,17:53
+
+Backend-only change: normalize and allowlist the five user-provided page hostnames from the request (host preferred; valid same-site origin/referrer fallback for proxy requests). Pass optional sourceDomain separately from validated form data into the inquiry transaction and email builder; store sourceDomain in existing inquiry JSON and render it in immutable HTML/plain-text payload and safe subject. Keep configured canonical dashboard URL separate from originating domain. Unknown hosts remain explicitly unavailable rather than inventing a known page; existing requests/queued records and all frontend files stay unchanged. Validate exact domains, spoofed/unknown/control headers, persistence, idempotent repeats and full-entry emails with mocked operations, then normal fast-forward V2 sync and existing GitHub-triggered Vercel deployment.

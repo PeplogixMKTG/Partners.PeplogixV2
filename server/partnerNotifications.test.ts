@@ -120,6 +120,7 @@ describe("notification server-only configuration", () => {
     const record = buildNotificationRecord({
       id: INQUIRY_ID,
       submittedAt: new Date("2026-11-02T12:00:00Z"),
+      sourceDomain: "weg.partners.peplogix.com",
       data: {
         company: "Test Company",
         firstName: "Test",
@@ -139,6 +140,11 @@ describe("notification server-only configuration", () => {
     expect(saved.to).toEqual(["team@example.com", "second@example.com"]);
     expect(saved.reply_to).toBe("applicant@example.com");
     expect(saved.text).toContain("Include this complete note");
+    expect(saved.subject).toContain("weg.partners.peplogix.com");
+    expect(saved.text).toContain(
+      "Submitted from domain: weg.partners.peplogix.com"
+    );
+    expect(saved.html).toContain("weg.partners.peplogix.com");
   });
 });
 
@@ -225,13 +231,11 @@ describe("durable state and safe retry", () => {
       })
     );
     getDbMock.mockResolvedValue(db);
-    const fetcher = vi
-      .fn()
-      .mockResolvedValue(
-        new Response(JSON.stringify({ id: "corrected-provider-id" }), {
-          status: 200,
-        })
-      );
+    const fetcher = vi.fn().mockResolvedValue(
+      new Response(JSON.stringify({ id: "corrected-provider-id" }), {
+        status: 200,
+      })
+    );
     vi.stubGlobal("fetch", fetcher);
     await deliverNotification(INQUIRY_ID, true);
     expect(fetcher).toHaveBeenCalledOnce();
@@ -246,6 +250,32 @@ describe("durable state and safe retry", () => {
     await deliverNotification(INQUIRY_ID, true);
     expect(fetcher).not.toHaveBeenCalled();
     expect(db.sets).toEqual([]);
+  });
+  it("retries the immutable original source and recipients rather than reattributing the inquiry", async () => {
+    configured();
+    const original = {
+      ...payload,
+      subject:
+        "New Peplogix Partnership Inquiry [jvega.partners.peplogix.com] — Test Company",
+      text: "Submitted from domain: jvega.partners.peplogix.com",
+      html: "<p>Submitted from domain: jvega.partners.peplogix.com</p>",
+    };
+    const db = fakeDb(
+      row({ status: "failed", payload: JSON.stringify(original) })
+    );
+    getDbMock.mockResolvedValue(db);
+    vi.stubEnv("PARTNER_NOTIFICATION_TO", "new-recipient@example.com");
+    const fetcher = vi
+      .fn()
+      .mockResolvedValue(
+        new Response(JSON.stringify({ id: "original-source-retry" }), {
+          status: 200,
+        })
+      );
+    vi.stubGlobal("fetch", fetcher);
+    await deliverNotification(INQUIRY_ID);
+    expect(JSON.parse(fetcher.mock.calls[0][1].body)).toEqual(original);
+    expect(db.data.status).toBe("sent");
   });
   it("does not take another request's active send lease", async () => {
     configured();

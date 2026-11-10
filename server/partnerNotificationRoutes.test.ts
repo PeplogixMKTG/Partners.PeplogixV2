@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { partnerInquiries, partnerNotifications } from "../drizzle/schema";
+import { PARTNER_SOURCE_DOMAINS } from "./partnerSource";
 
 const mocks = vi.hoisted(() => ({
   getDb: vi.fn(),
@@ -128,6 +129,47 @@ describe("inquiry notification integration", () => {
     );
     expect(mocks.tryDeliver).toHaveBeenCalledOnce();
   });
+  it.each(PARTNER_SOURCE_DOMAINS)(
+    "persists the actual %s source alongside the full entry and durable email",
+    async domain => {
+      const insertions: any[] = [];
+      const tx = {
+        ...lockedInquiryLookup(),
+        insert: (table: any) => ({
+          values: async (values: any) => {
+            insertions.push({ table, values });
+          },
+        }),
+      };
+      mocks.getDb.mockResolvedValue({
+        ...inquiryLookup([]),
+        transaction: async (work: any) => work(tx),
+      });
+      mocks.build.mockImplementation((input: any) => ({
+        inquiryId: input.id,
+        payload: JSON.stringify({ sourceDomain: input.sourceDomain }),
+      }));
+      const res = response();
+      await handler("post", "/api/partner/inquiries")(
+        {
+          body: submission,
+          headers: { host: domain, origin: `https://${domain}` },
+        },
+        res
+      );
+      expect(res.statusCode).toBe(201);
+      const saved = JSON.parse(insertions[0].values.data);
+      expect(saved.sourceDomain).toBe(domain);
+      expect(saved.needs).toBe("Full notes preserved");
+      expect(mocks.build).toHaveBeenCalledWith(
+        expect.objectContaining({ sourceDomain: domain })
+      );
+      expect(JSON.parse(insertions[1].values.payload).sourceDomain).toBe(
+        domain
+      );
+      expect(mocks.tryDeliver).toHaveBeenCalledOnce();
+    }
+  );
   it("does not create a second inquiry or notification for a repeated submission UUID", async () => {
     const db = {
       ...inquiryLookup([{ id, submittedAt: new Date() }]),
@@ -135,7 +177,10 @@ describe("inquiry notification integration", () => {
     };
     mocks.getDb.mockResolvedValue(db);
     const res = response();
-    await handler("post", "/api/partner/inquiries")({ body: submission }, res);
+    await handler("post", "/api/partner/inquiries")(
+      { body: submission, headers: { host: "eric.partners.peplogix.com" } },
+      res
+    );
     expect(res.statusCode).toBe(200);
     expect(db.transaction).not.toHaveBeenCalled();
     expect(mocks.build).not.toHaveBeenCalled();
