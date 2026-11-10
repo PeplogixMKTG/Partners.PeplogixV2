@@ -17,14 +17,15 @@ import {
   ChevronDown,
   CircleDollarSign,
   Globe2,
+  GraduationCap,
   Layers3,
   LoaderCircle,
+  Megaphone,
   PackageCheck,
-  Palette,
   Pencil,
   Plus,
   Send,
-  ShoppingBag,
+  ShieldCheck,
   Store,
   Truck,
   UploadCloud,
@@ -293,15 +294,19 @@ function formatBytes(bytes: number) {
 }
 
 function optionIcon(value: string) {
-  if (value === "Wholesale Supply") return <PackageCheck aria-hidden="true" />;
-  if (value === "White-Label Products") return <Palette aria-hidden="true" />;
-  if (value === "Custom-Branded Storefront")
-    return <Store aria-hidden="true" />;
-  if (value === "Dropshipping Fulfillment") return <Truck aria-hidden="true" />;
-  if (value === "3PL Warehousing & Fulfillment")
-    return <Layers3 aria-hidden="true" />;
-  if (value === "Wholesale + Custom Storefront")
-    return <ShoppingBag aria-hidden="true" />;
+  if (value === "Turnkey Business") return <Store aria-hidden="true" />;
+  if (value === "Product Supply and 3PL Fulfilment Only")
+    return <Truck aria-hidden="true" />;
+  if (value === "Wholesale and Contract Manufacturing")
+    return <PackageCheck aria-hidden="true" />;
+  if (value === "503a FDA Approved Products and Medical Supplies")
+    return <ShieldCheck aria-hidden="true" />;
+  if (value === "Education and Training")
+    return <GraduationCap aria-hidden="true" />;
+  if (value === "Payment Processing")
+    return <CircleDollarSign aria-hidden="true" />;
+  if (value === "Marketing and Compliance Resources")
+    return <Megaphone aria-hidden="true" />;
   return <Plus aria-hidden="true" />;
 }
 
@@ -1193,6 +1198,9 @@ export default function PartnerInquiry() {
             >
               <input
                 type="checkbox"
+                name="partnerships"
+                value={option.value}
+                aria-label={option.value}
                 checked={selected}
                 onChange={() =>
                   setPartnerships(toggleValue(data.partnerships, option.value))
@@ -1207,6 +1215,11 @@ export default function PartnerInquiry() {
               <span className="partner-option-card__content">
                 <strong>{option.value}</strong>
                 <span>{option.description}</span>
+                {"clarification" in option && (
+                  <span className="partner-option-card__clarification">
+                    {option.clarification}
+                  </span>
+                )}
               </span>
             </label>
           );

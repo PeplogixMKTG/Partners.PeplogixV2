@@ -12,40 +12,59 @@ export const businessTypeOptions = [
 
 export const partnershipOptions = [
   {
-    value: "Wholesale Supply",
+    value: "Turnkey Business",
     description:
-      "Purchase products in bulk and sell them through your existing business or sales channels.",
+      "Get a custom-branded e-commerce website with a full storefront and built-in merchant processing. Our inventory and 3PL logistics support your brand behind the scenes. Add our optional marketing package, led by a marketing professional with 15 years of experience, to leverage your existing network and drive revenue compliantly.",
   },
   {
-    value: "White-Label Products",
+    value: "Product Supply and 3PL Fulfilment Only",
     description:
-      "Peplogix products branded with your company logo and visual identity.",
+      "Already have a website but need products? We can supply your products and handle all of your fulfillment. Our inventory and 3PL logistics team stores, packs, and ships every order on your behalf, so you can focus on growing your brand.",
   },
   {
-    value: "Custom-Branded Storefront",
+    value: "Wholesale and Contract Manufacturing",
     description:
-      "A website or ecommerce platform built for your brand, product catalog, and customers.",
+      "Stock your clinic, spa, or retail shelves with our full product line at tiered wholesale pricing. Ready to launch your own formulas? Our contract manufacturing service takes your product from formulation to finished, labeled goods, with private-label packaging and quality-controlled production, all at scale.",
   },
   {
-    value: "Dropshipping Fulfillment",
+    value: "503a FDA Approved Products and Medical Supplies",
     description:
-      "Sell through your business while orders are fulfilled directly to your customers.",
+      "Give your patients access to compounded medications prepared by licensed 503A pharmacy partners and dispensed under valid, patient-specific prescriptions. Pair them with the medical supplies your practice relies on, such as syringes, alcohol prep pads, and other clinical essentials, all ordered through one convenient portal and shipped directly to you or your patients.",
+    clarification:
+      "503A compounded medications are not FDA-approved. FDA approval applies only to products that have individually received FDA approval, not to compounded preparations.",
   },
   {
-    value: "3PL Warehousing & Fulfillment",
+    value: "Education and Training",
     description:
-      "Warehousing, inventory management, order processing, and fulfillment support.",
+      "Learn the business from people who have built it. Our education hub includes quick-start guides, video training, and live onboarding sessions covering product knowledge, dosing protocols for licensed providers, compliant marketing, and sales best practices. Ongoing courses and certifications keep you and your team current as the industry evolves.",
   },
   {
-    value: "Wholesale + Custom Storefront",
+    value: "Payment Processing",
     description:
-      "Wholesale product supply with a dedicated ecommerce storefront for your brand.",
+      "Get reliable merchant processing built for our industry. We connect you with processing partners who understand your products, so you can accept cards and online payments with fewer holds, freezes, and declined applications.",
   },
   {
-    value: "Other Partnership Opportunity",
+    value: "Marketing and Compliance Resources",
     description:
-      "A different partnership model you would like to explore with our team.",
+      "Grow without the guesswork. Get ready-to-use marketing assets, social media templates, email campaigns, and compliance guidance that helps your messaging stay within FDA and FTC guidelines.",
   },
+] as const;
+
+// Kept out of the visible picker. Accept older already-open form sessions and
+// historical inquiries without changing their meaning during deployment.
+export const legacyPartnershipValues = [
+  "Wholesale Supply",
+  "White-Label Products",
+  "Custom-Branded Storefront",
+  "Dropshipping Fulfillment",
+  "3PL Warehousing & Fulfillment",
+  "Wholesale + Custom Storefront",
+  "Other Partnership Opportunity",
+] as const;
+
+const acceptedPartnershipValues = [
+  ...partnershipOptions.map(option => option.value),
+  ...legacyPartnershipValues,
 ] as const;
 
 export const productOptions = [
@@ -232,22 +251,28 @@ export const hasPartnership = (
 ) => data.partnerships.includes(partnership);
 
 export const needsStorefront = (data: Pick<PartnerFormData, "partnerships">) =>
+  hasPartnership(data, "Turnkey Business") ||
   hasPartnership(data, "Custom-Branded Storefront") ||
   hasPartnership(data, "Wholesale + Custom Storefront");
 
 export const needsDropship = (data: Pick<PartnerFormData, "partnerships">) =>
+  hasPartnership(data, "Product Supply and 3PL Fulfilment Only") ||
   hasPartnership(data, "Dropshipping Fulfillment");
 
 export const needsFulfillment = (data: Pick<PartnerFormData, "partnerships">) =>
+  hasPartnership(data, "Turnkey Business") ||
+  hasPartnership(data, "Product Supply and 3PL Fulfilment Only") ||
   hasPartnership(data, "3PL Warehousing & Fulfillment");
 
 export const needsWholesale = (data: Pick<PartnerFormData, "partnerships">) =>
+  hasPartnership(data, "Wholesale and Contract Manufacturing") ||
   hasPartnership(data, "Wholesale Supply") ||
   hasPartnership(data, "Wholesale + Custom Storefront");
 
 export const needsBrandCustomization = (
   data: Pick<PartnerFormData, "partnerships" | "dropshipMode">
 ) =>
+  hasPartnership(data, "Wholesale and Contract Manufacturing") ||
   hasPartnership(data, "White-Label Products") ||
   needsStorefront(data) ||
   (needsDropship(data) &&
@@ -409,16 +434,9 @@ export const partnerInquiryDataSchema = z
       ),
     businessOther: optionalText(500),
     partnerships: z
-      .array(
-        z.enum(
-          partnershipOptions.map(option => option.value) as [
-            string,
-            ...string[],
-          ]
-        )
-      )
+      .array(z.enum(acceptedPartnershipValues))
       .min(1, "Select at least one partnership option")
-      .max(partnershipOptions.length)
+      .max(acceptedPartnershipValues.length)
       .refine(
         values => new Set(values).size === values.length,
         "Partnerships must not contain duplicates"

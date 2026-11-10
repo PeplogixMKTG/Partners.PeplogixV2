@@ -47,9 +47,8 @@ with sync_playwright() as p:
     page.get_by_role('button',name='Continue',exact=True).click()
     expect(page.locator('#company')).to_have_attribute('aria-invalid','true')
     business(page,'PEPLOGIX_BROWSER_TEST_DESKTOP')
-    for s in ['Wholesale Supply','White-Label Products','Custom-Branded Storefront','Dropshipping Fulfillment','3PL Warehousing & Fulfillment','Other Partnership Opportunity']:
+    for s in ['Turnkey Business','Product Supply and 3PL Fulfilment Only','Wholesale and Contract Manufacturing','Marketing and Compliance Resources']:
         select_service(page,s)
-    page.locator('#partnershipOther').fill('A custom B2B research supply partnership')
     page.locator('#productSearch').fill('BPC')
     page.locator('.partner-product-option',has_text='BPC-157').locator('input').check(force=True)
     page.locator('#productSearch').fill('')
@@ -115,15 +114,14 @@ with sync_playwright() as p:
     page=browser.new_page(viewport={'width':390,'height':844},is_mobile=True,has_touch=True)
     page.goto(BASE);page.wait_for_selector('#company')
     business(page,'PEPLOGIX_BROWSER_TEST_MOBILE')
-    select_service(page,'Wholesale Supply')
+    select_service(page,'Marketing and Compliance Resources')
     page.locator('.partner-product-option',has_text='Capsules').locator('input').check(force=True)
-    radio(page,'purchaseMode','Not Sure Yet');radio(page,'initialSize','Just Exploring')
     page.get_by_role('button',name='Continue',exact=True).click()
     expect(page.locator('#partner-form-title')).to_have_text("You're One Step Closer.")
     expect(page.get_by_text('Brand customization was skipped',exact=False)).to_be_visible()
     assert page.evaluate('document.documentElement.scrollWidth')==390
     page.get_by_role('button',name='Back',exact=True).click()
-    expect(page.locator('input[name="initialSize"][value="Just Exploring"]')).to_be_checked()
+    expect(page.locator('.partner-option-card',has_text='Marketing and Compliance Resources').locator('input')).to_be_checked()
     page.get_by_role('button',name='Continue',exact=True).click()
     page.locator('.partner-confirm input').check(force=True)
     with page.expect_response(lambda r:r.url.endswith('/api/partner/inquiries') and r.request.method=='POST') as r:

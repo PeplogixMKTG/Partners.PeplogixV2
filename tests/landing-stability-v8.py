@@ -35,7 +35,7 @@ with sync_playwright() as p:
             """
         )
         page.goto(BASE, wait_until="commit")
-        page.wait_for_timeout(75)
+        page.wait_for_function("document.querySelector('.boot-brand img, .brand-lockup img') !== null")
         first_paint = page.evaluate(
             """() => {
               const logo = document.querySelector('.boot-brand img, .brand-lockup img');
@@ -79,7 +79,9 @@ with sync_playwright() as p:
         fill_step_one(page, name)
         page.get_by_role("button", name="Continue", exact=True).click()
         expect(page.locator("#partner-form-title")).to_have_text("How Would You Like to Partner With Peplogix?")
-        page.locator(".partner-option-card", has_text="White-Label Products").locator("input").check(force=True)
+        page.locator(".partner-option-card", has_text="Wholesale and Contract Manufacturing").locator("input").check(force=True)
+        page.locator('input[name="purchaseMode"][value="Bulk Wholesale Orders"]').check(force=True)
+        page.locator('input[name="initialSize"][value="Small Initial Order"]').check(force=True)
         page.locator("#productSearch").fill("KLOW")
         expect(page.locator(".partner-product-option")).to_have_count(1)
         page.locator(".partner-product-option", has_text="KLOW").locator("input").check(force=True)

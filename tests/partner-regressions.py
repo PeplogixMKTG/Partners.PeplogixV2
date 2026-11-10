@@ -11,7 +11,9 @@ with sync_playwright() as p:
  page.locator('input[name="hasWebsite"][value="No"]').check(force=True)
  page.locator('input[name="businessTypes"][value="Ecommerce Brand"]').check(force=True)
  page.get_by_role('button',name='Continue',exact=True).click()
- page.locator('.partner-option-card',has_text='White-Label Products').locator('input').check(force=True)
+ page.locator('.partner-option-card',has_text='Wholesale and Contract Manufacturing').locator('input').check(force=True)
+ page.locator('input[name="purchaseMode"][value="Bulk Wholesale Orders"]').check(force=True)
+ page.locator('input[name="initialSize"][value="Small Initial Order"]').check(force=True)
  page.get_by_role('button',name='Continue',exact=True).click()
  expect(page.locator('#partner-form-title')).to_have_text('Make It Your Brand.')
  # Unsupported formats are rejected on the client and never sent to the server.
@@ -46,9 +48,8 @@ with sync_playwright() as p:
  expect(page.get_by_text('Uploaded securely',exact=True)).to_be_visible()
  hidden_id=uploaded.value.json()['id']
  page.get_by_role('button',name='Back',exact=True).click()
- page.locator('.partner-option-card',has_text='White-Label Products').locator('input').uncheck(force=True)
- page.locator('.partner-option-card',has_text='Other Partnership Opportunity').locator('input').check(force=True)
- page.locator('#partnershipOther').fill('Testing an unbranded partnership path')
+ page.locator('.partner-option-card',has_text='Wholesale and Contract Manufacturing').locator('input').uncheck(force=True)
+ page.locator('.partner-option-card',has_text='Marketing and Compliance Resources').locator('input').check(force=True)
  page.get_by_role('button',name='Continue',exact=True).click()
  expect(page.locator('#partner-form-title')).to_have_text("You're One Step Closer.")
  page.locator('.partner-confirm input').check(force=True)

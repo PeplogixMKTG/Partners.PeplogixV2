@@ -109,3 +109,37 @@ The existing Vercel application now saves inquiries to the managed MySQL databas
 ## Single-owner dashboard access — November 2, 12:53
 
 Only the configured gpernudi@peplogix.com password-mode owner may authenticate to the external dashboard and its protected APIs. Match signed sessions to the canonical password-owner OpenID, current configured email, password login method and admin role; leave Manus-mode behavior unchanged. Update the user-supplied password only in Vercel secret storage and rotate the session signing key so previously issued sessions are invalid. Preserve every client file, submission route and email setting. Never put the password in Git or this plan.
+
+Owner-only access verified on the deployed November2 version: live acceptance/rejection tests passed, including invalidation of an actual old session. Credentials remain secret-only; no client changes. A concurrent existing Vercel domain redirect targets partners.peplogix.com, which is not resolving from this environment; this update did not alter domains/DNS.
+
+## Two-recipient notifications and missed test recovery — November 2,16:54
+
+User now authorizes full-entry email to gpernudi@peplogix.com and gelsey@marketingdna.com. Inspect the existing saved test and durable delivery state, current Vercel settings, and Resend sender verification first. Correct environment-only sender/recipient configuration where supported, redeploy the existing source, and retry only definitely unsent notifications without weakening idempotency. Keep owner-only dashboard access and every frontend file unchanged. No domain/DNS changes are authorized by this request; if Resend still has only its restricted default sender, report that prerequisite rather than breaking currently working notifications.
+
+## Temporary single-recipient restoration — November 2,16:58
+
+User explicitly chose to restore gpernudi-only notifications. Keep Resend's current default sender and change only PARTNER_NOTIFICATION_TO back to gpernudi@peplogix.com in Production; redeploy the current Vercel source without altering website or dashboard credentials. Recover only the identified test4 notification with provider403, no provider ID and no successful send, retaining the full saved entry and file metadata. A recipient correction for this definitively rejected outbox payload must be audited and conditional; do not mutate sent or ambiguous delivery records or send duplicates. Verify provider acceptance and Resend delivery before marking complete. Gelsey remains excluded until a sender domain is verified.
+
+Temporary restoration verified17:01: production redeploy Ready, sole recipient configured, exact rejected test corrected and safely retried, provider Delivered confirmed, and duplicate retry prevented. Both-recipient sending remains deferred until sender-domain verification; no website/DNS/admin-access changes.
+
+## Verified-domain two-recipient activation — November 3
+
+User states Resend domain setup is complete and authorizes sending full-entry notifications to gpernudi@peplogix.com and gelsey@marketingdna.com. Verify the existing sending domain, replace the default From with Peplogix Partners at a notification address on that verified domain, and configure both addresses in PARTNER_NOTIFICATION_TO. Redeploy the existing source so runtime settings apply. Preserve all frontend, owner-only access, secrets and DNS settings. User plans to send a new test; inspect its durable delivery and Resend recipient statuses without generating unsolicited duplicate test submissions.
+
+November3 configuration activation complete: peplogix.com Verified, branded notifications@ sender and both approved recipients saved in Production; existing source redeployed Ready. Every application source file is unchanged. Actual delivery of the upcoming user test remains unverified until it is submitted.
+
+## Five-recipient replacement — November 3,10:26
+
+User authorized notification recipients only partner@peplogix.com, mgt@peplogix.com (explicitly corrected from .xom), wnagi@peplogix.com, sbuculesei@peplogix.com, gpernudi@peplogix.com. Replace PARTNER_NOTIFICATION_TO in Production, retaining verified From and every other setting. Redeploy current production source once; remove prior Gelsey recipient for future submissions and do not resend historical notifications. Preserve website and owner-only dashboard access.
+
+Five-recipient replacement complete10:27: Production variable update and redeployment succeeded. Current verified sender retained and prior Gelsey recipient excluded; no source/design/access changes or historical resends.
+
+## Partnership opportunity replacement — November 10
+
+Replace the visible seven checkbox cards in Step2 with the supplied seven service titles and complete descriptions in supplied order, one top-to-bottom column at desktop and mobile sizes. Retain existing colors, spacing system, checkbox multi-selection, icons, hero and all unrelated sections. Use service-specific icons. Turnkey Business opens the existing storefront and 3PL questions and brand preview; Product Supply and 3PL Fulfilment Only opens existing fulfillment/dropship requirements, with branding available when branded packaging is selected; Wholesale and Contract Manufacturing opens wholesale questions and brand customization. The four advisory/medical/processing/resource options need only the existing general optional interests/notes and proceed directly to review unless another selected option needs branding. Persist new names unchanged into review, database and full-entry notification emails. Retain legacy option names only in server validation/helper compatibility for historical and already-open sessions, never in the new visible picker. No database migration, notification recipient, authentication, DNS or other landing-page changes.
+
+FDA states compounded medications are not FDA-approved. Requested permission to title the medical option “503A Compounded Medications and Medical Supplies” while preserving its provided description; do not publish the disputed original heading without resolution. Source: https://www.fda.gov/drugs/human-drug-compounding/compounding-and-fda-questions-and-answers .
+
+User requested original medical title be kept. Keep exact original title and supplied description; display an immediate, readable clarification beneath it that 503A compounded medications are not FDA-approved, avoiding an unqualified false medical claim. All seven supplied titles and descriptions retained.
+
+November10 local implementation validated: seven complete descriptions and single-column desktop/tablet/mobile layout, conditional mappings and safe form flows passed. New service names render in full-entry emails; legacy names remain accepted only for historical/in-flight compatibility. Existing hero/assets/catalog/owner access/notification settings unchanged. Both builds and250 backend tests passed.
